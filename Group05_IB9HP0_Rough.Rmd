@@ -32,7 +32,6 @@ CREATE TABLE 'customers' (
 ```{sql connection=my_db}
 CREATE TABLE 'order_details' (
   'order_detail_id' INT PRIMARY KEY,
-  'product_sku' VARCHAR(20),
   'product_id' INT NOT NULL, 
   'product_quantity' INT, 
   'order_id' INT NOT NULL,
