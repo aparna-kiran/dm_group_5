@@ -1,0 +1,132 @@
+---
+title: "Group05_IB9HP0_Rough"
+author: "Group Members"
+date: "2024-03-05"
+output: html_document
+---
+
+```{r}
+library(RSQLite)
+library(readr)
+```
+
+
+##Creating the database connection
+```{r}
+my_db <- RSQLite::dbConnect(RSQLite::SQLite(),"ecommerce.db")
+```
+
+```{sql connection=my_db}
+CREATE TABLE 'customers' (
+'customer_id' INT PRIMARY KEY, 
+'first_name' VARCHAR(50) NOT NULL, 
+'last_name' VARCHAR(50) NOT NULL,
+'email' VARCHAR(100) NOT NULL, 
+'password' VARCHAR(100) NOT NULL, 
+'billing_address' VARCHAR(250) NOT NULL,
+'phone_number' VARCHAR(20) NOT NULL, 
+'shipping_address' VARCHAR(250) NOT NULL
+);
+```
+
+```{sql connection=my_db}
+CREATE TABLE 'order_details' (
+  'order_detail_id' INT PRIMARY KEY,
+  'product_sku' VARCHAR(20),
+  'product_id' INT NOT NULL, 
+  'product_quantity' INT, 
+  'order_id' INT NOT NULL,
+  'product_price' DECIMAL(10, 2) NOT NULL,
+  FOREIGN KEY ('product_id')
+    REFERENCES products ('product_id'),
+  FOREIGN KEY ('order_id')
+    REFERENCES orders ('order_id')
+);
+
+```
+
+```{sql connection=my_db}
+CREATE TABLE 'transactions' (
+  'transaction_id' INT PRIMARY KEY,
+  'transaction_method' TEXT NOT NULL,
+  'receipt_invoice' VARCHAR(20) NOT NULL,
+  'order_id' INT NOT NULL,
+  'customer_id' INT NOT NULL,
+  'transaction_date' DATE NOT NULL,
+  FOREIGN KEY ('customer_id') 
+   REFERENCES customers('customer_id'),
+  FOREIGN KEY ('order_id') 
+   REFERENCES orders('order_id')
+);
+
+```
+
+
+Create table for products entity
+```{sql connection=my_db}
+CREATE TABLE 'products' (
+  'product_id' INT PRIMARY KEY,
+  'product_name' VARCHAR(100) NOT NULL,
+  'product_sku' VARCHAR(20),
+  'price' DECIMAL(10,2) NOT NULL,
+  'category_id' INT NOT NULL, 
+  'stock_quantity' INT,
+  'supplier_id' INT NOT NULL,
+  FOREIGN KEY ('category_id')
+    REFERENCES product_categories ('category_id'),
+  FOREIGN KEY ('supplier_id')
+    REFERENCES suppliers ('supplier_id')
+);
+```
+
+#Create table for product categories
+```{sql connection=my_db}
+CREATE TABLE 'product_categories' (
+  'category_id' INT PRIMARY KEY,
+  'category_name' VARCHAR(50) NOT NULL,
+  'description' VARCHAR(250)
+);
+```
+
+Create table for suppliers
+```{sql connection=my_db}
+CREATE TABLE 'suppliers' (
+  'supplier_id' INT PRIMARY KEY,
+  'supplier_name' VARCHAR(100) NOT NULL,
+  'supplier_email' VARCHAR(100) NOT NULL
+);
+```
+
+#Create a table for addresses
+```{sql connection=my_db}
+DROP TABLE IF EXISTS addresses;
+CREATE TABLE 'addresses'(
+  'address_id' INT PRIMARY KEY,
+  'address_line_1' VARCHAR(250) NOT NULL,
+  'address_line_2' VARCHAR(250),
+  'address_line_3' VARCHAR(250),
+  'city' VARCHAR(100) NOT NULL,
+  'state/county' VARCHAR(100) NOT NULL,
+  'postcode' VARCHAR(10) NOT NULL,
+  'country' VARCHAR(50) NOT NULL
+);
+```
+
+#Create a table for orders
+
+```{sql connection=my_db}
+CREATE TABLE 'orders'(
+  'order_id' INT PRIMARY KEY,
+  'order_date' DATE NOT NULL,
+  'order_status' VARCHAR(100) NOT NULL,
+  'total_price' INT NOT NULL,
+  'estimated_delivery_date' DATE NOT NULL,
+  'customer_id' INT NOT NULL,
+  'shipping_address_id' INT NOT NULL,
+  FOREIGN KEY('customer_id')
+    REFERENCES customers('customer_id'),
+  FOREIGN KEY('shipping_address_id')
+    REFERENCES addresses('address_id')
+)
+```
+
