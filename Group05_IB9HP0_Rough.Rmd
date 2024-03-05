@@ -83,7 +83,6 @@ CREATE TABLE 'products' (
 CREATE TABLE 'product_categories' (
   'category_id' INT PRIMARY KEY,
   'category_name' VARCHAR(50) NOT NULL,
-  'description' VARCHAR(250)
 );
 ```
 
