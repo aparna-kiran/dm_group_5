@@ -128,4 +128,3 @@ CREATE TABLE 'orders'(
     REFERENCES addresses('address_id')
 )
 ```
-
