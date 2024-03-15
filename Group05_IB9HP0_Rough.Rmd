@@ -83,7 +83,6 @@ CREATE TABLE 'products' (
 CREATE TABLE 'product_categories' (
   'category_id' INT PRIMARY KEY,
   'category_name' VARCHAR(50) NOT NULL,
-  'description' VARCHAR(250)
 );
 ```
 
@@ -128,9 +127,11 @@ CREATE TABLE 'orders'(
     REFERENCES addresses('address_id')
 )
 ```
+<<<<<<< HEAD
 
 
 ```{sql connection=my_db}
 
 ```
 
+=======
