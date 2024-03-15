@@ -5,6 +5,12 @@ format: pdf
 editor: visual
 ---
 
+## Database Design and Implementation
+
+1.  E-R Diagram Design:
+
+    ![E-R Diagram](E-R Diagram/ER Diagram.jpg)
+
 ## Quarto
 
 Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
