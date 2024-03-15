@@ -1,27 +1,28 @@
 ---
-title: "Untitled"
+title: "Data Management Group Assignment"
 author: "DM Group 5"
 format: pdf
 editor: visual
 ---
 
+# Contents
+
+1.  Database Design and Implementation
+2.  Data Generation and Management
+3.  Data Pipeline Generation
+4.  Data Analysis
+
 ## Database Design and Implementation
 
 1.  E-R Diagram Design:
 
-    ![E-R Diagram](E-R Diagram/ER Diagram.jpg)
-
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+    ![E-R Diagram](E-R%20Diagram/ER%20Diagram.jpg)
 
 ```{r}
 
 ```
+
+1.2 SQL Database Schema Creation
 
 ```{r}
 
@@ -30,22 +31,75 @@ When you click the **Render** button a document will be generated that includes 
 ```{1 + 1}
 ```
 
-You can add options to executable code like this
+## Data Generation and Management
+
+### 2.1 Synthetic Data Generation
+
+### 2.2 Data Import and Quality Assurance
+
+After uploading the data files, the rows and columns of each dataset was displayed using the below code:
 
 ```{r}
-#| echo: false
-2 * 2
+data_files <- list.files("data_uploads/Dataset/")
+
+suffix <- "-Table 1"
+
+# Rename files
+for (file in data_files) {
+  # Create a new filename
+  new_filename <- paste0("data_uploads/Dataset/", gsub(suffix, "", file))
+  file <- paste0("data_uploads/Dataset/", file)
+  # Rename the file
+  file.rename(from = file, to = new_filename)
+}
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+To import the data sets into the SQLite database, we used the below code:
 
 ```{r}
+data_files <- list.files("data_uploads/Dataset/")
 
+db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"ecommerce.db")
 
+# To display the rows and columns of each dataset and 
+# To import each csv file into the database table
+for (file in data_files) {
+  this_filepath <- paste0("data_uploads/Dataset/", file)
+  this_file_contents <- readr::read_csv(this_filepath)
+  
+  number_of_rows <- nrow(this_file_contents)
+  number_of_columns <- ncol(this_file_contents)
+  
+  #To print the number of columns and rows of each dataset
+  print(paste0("The file: ",file,
+               " has: ",
+               format(number_of_rows,big.mark = ","),
+               " rows and ",
+               number_of_columns," columns"))
+  
+  table_name <- gsub(".csv","",file)
+  
+  #Writing the csv file contents to the database and
+  #creating the table with the table_name
+  RSQLite::dbWriteTable(db_connection,table_name,this_file_contents,overwrite=TRUE)
+  
+  #To list the database tables
+  RSQLite::dbListTables(db_connection)
+}
+
+RSQLite::dbDisconnect(db_connection)
 ```
 
-```{r}
+## 3 Data Pipeline Generation
 
-```
+### 3.1 Github Repository and Workflow Setup
 
 ETL (Extract, transform, load)
+
+```{r}
+
+```
+
+### 3.2 Github Actions for Continuous Integration
+
+4.  Data Analysis
