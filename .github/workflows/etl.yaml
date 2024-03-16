@@ -33,5 +33,4 @@ jobs:
       - name: Add files
         run: |
           git config --global user.email "aparnakiran.as@gmail.com"
-          git config --global user.name "aparna-kiran"
-          git add --all figures/         
+          git config --global user.name "aparna-kiran"      
