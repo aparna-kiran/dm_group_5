@@ -1,3 +1,6 @@
+
+# All the codes are basically working, but some of them have some small issues
+
 library(readr)
 
 # Get a list of file names in the directory
@@ -50,6 +53,7 @@ for (variable in data_files) {
   # Print the result
   print(paste0("Checking for duplicates in '", variable, "': ", number_of_duplicates, " duplicates found"))
 }
+#This code is working, but for transaction, its still showing duplicates even I only did for the first column
 
 
 # Check missing values
@@ -143,7 +147,7 @@ if (all(phone_format_correct)) {
 
 
 
-#check date is in DD/MM/YYYY format
+#check date is in DD/MM/YYYY format, this code don't run really fine
 library(readr)
 
 # Assuming data_files is a vector of CSV filenames
