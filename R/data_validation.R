@@ -38,6 +38,7 @@ for (variable in data_files) {
   print(paste0("Checking for: ", variable))
   print(paste0(" is ", nrow(unique(this_file_contents[, 1]))==number_of_rows))
 }
+# transaction result is False, which it should be True to check primary key
 
 
 #Check duplicates
@@ -148,8 +149,6 @@ if (all(phone_format_correct)) {
 
 
 #check date is in DD/MM/YYYY format, this code don't run really fine
-library(readr)
-
 # Assuming data_files is a vector of CSV filenames
 for (variable in data_files) {
   this_filepath <- paste0("data_uploads/", variable)
