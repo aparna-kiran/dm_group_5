@@ -33,10 +33,14 @@ jobs:
       - name: Add files
         run: |
           git config --global user.email "aparnakiran.as@gmail.com"
-          git config --global user.name "aparna-kiran"      
-      - name: Commit files
+          git config --global user.name "aparna-kiran"   
+      - name: Check if commit was made by GitHub
         run: |
-          git commit -m "Adding new file to database"
+          if [ "${{ github.actor }}" != "github-actions[bot]" ]; then
+            echo "This commit was not made by GitHub. Exiting..."
+            git commit -m "Adding new file to database"
+            exit 1
+          fi
       - name: Push changes
         uses: ad-m/github-push-action@v0.6.0
         with:
