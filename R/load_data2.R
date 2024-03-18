@@ -3,19 +3,6 @@ library(RSQLite)
 
 data_files <- list.files("data_uploads/")
 
-suffix <- "-Table 1"
-
-# Rename files
-for (file in data_files) {
-  # Create a new filename
-  new_filename <- paste0("data_uploads/Dataset/", gsub(suffix, "", file))
-  file <- paste0("data_uploads/Dataset/", file)
-  # Rename the file
-  file.rename(from = file, to = new_filename)
-}
-
-data_files <- list.files("data_uploads/")
-
 db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"try_ecommerce.db")
 
 customers <- "
@@ -117,8 +104,8 @@ CREATE TABLE 'orders'(
 );
 "
   
-  #Writing the csv file contents to the database and
-  #creating the table with the table_name
+#Writing the csv file contents to the database and
+#creating the table with the table_name
   RSQLite::dbWriteTable(db_connection,"customers","customers.csv",append=TRUE)
   RSQLite::dbWriteTable(db_connection,"order_details","order_details.csv",append=TRUE)
   RSQLite::dbWriteTable(db_connection,"transactions","transactions.csv",append=TRUE)
@@ -128,11 +115,9 @@ CREATE TABLE 'orders'(
   RSQLite::dbWriteTable(db_connection,"promotion","promotion.csv",append=TRUE)
   RSQLite::dbWriteTable(db_connection,"orders","orders.csv",append=TRUE)
 
-
-
-
+  
 #Data Validation
-
+  
 # Check if the first column of each file is a primary
 for (variable in data_files) {
   this_filepath <- paste0("data_uploads/", variable)
@@ -142,7 +127,6 @@ for (variable in data_files) {
   print(paste0(" is ", nrow(unique(this_file_contents[, 1]))==number_of_rows))
 }
 # transaction result is False, which it should be True to check primary key
-
 
 #Check duplicates
 for (variable in data_files) {
