@@ -39,6 +39,8 @@ editor: visual
 
 ### 2.1 Synthetic Data Generation
 
+chatgpt,
+
 ### 2.2 Data Import and Quality Assurance
 
 After uploading the data files, the rows and columns of each dataset was displayed using the below code:
