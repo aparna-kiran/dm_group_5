@@ -14,33 +14,124 @@ editor: visual
 
 ## Database Design and Implementation
 
-1.1 E-R Diagram Design:
+#### 1.1 E-R Diagram Design:
 
 1.  E-R Diagram:\
     We created an Entity-Relationship diagram for an e-commerce store by first identifying a total of 7 key entities namely suppliers, customers, products, product categories, order details, transactions and promotions. Relationships were created to better define the connection between two entities which included provide, belong to, order and make. Attributes were created to detail the information held within every entity. Order relationship was given multiple attributes to better explain the nature of the relationship. After analysis of the ER diagram, to efficiently define the data held within shipping address attribute, it was given further attributes and used as a composite attribute for order details.\
     \
-    Assumptions: Multiple Suppliers provide Multiple Products, Multiple products belong to a single product category, Multiple customers can order multiple products, multiple customers can make multiple transactions, multiple products can be contained in a single order detail and multiple promotions can be applied to multiple products.![Entity-Relationship Diagram](E-R%20Diagram/E-R%20Diagram.jpeg)
+    Assumptions: Multiple Suppliers provide Multiple Products, Multiple products belong to a single product category, Multiple customers can order multiple products, multiple customers can make multiple transactions, multiple products can be contained in a single order detail and multiple promotions can be applied to multiple products.
 
-2.  Relationship Set Design:\
-    ![Suppliers PROVIDE products](Relationship%20Sets/Suppliers%20PROVIDE%20products.png){width="343"}\
-    Many-to-many relationship (M:N).
+    ![Entity-Relationship Diagram](E-R%20Diagram/E-R%20Diagram.jpeg)
 
-    ![Products BELONG TO Product Categories](Relationship%20Sets/Products%20BELONG%20TO%20Product%20Categories.png){width="374"}\
-    Many-to-one relationship (N:1).
+2.  Relationship Sets:
 
-    ![Customers ORDER products](Relationship%20Sets/Customers%20ORDER%20products.png){width="361"}\
-    Many-to-many relationship (M:N).
+    ![Suppliers PROVIDE products. Many-to-many relationship (M:N).](Relationship%20Sets/Suppliers%20PROVIDE%20products.png "Many-to-many relationship (M:N)."){width="305"}
 
-    ![Customers MAKE Transaction](Relationship%20Sets/Customers%20MAKE%20Transaction.png){width="354"}\
-    Many-to-many relationship (M:N).
+    ![Products BELONG TO Product Categories. Many-to-one relationship (N:1).](Relationship%20Sets/Products%20BELONG%20TO%20Product%20Categories.png "Many-to-one relationship (N:1)."){width="373"}
 
-    ![Order Details CONTAIN Products](Relationship%20Sets/Order%20Details%20CONTAIN%20Products.png){width="365"}\
-    One-to-many relationship (1:N).
+    ![Customers ORDER products. Many-to-many relationship (M:N).](Relationship%20Sets/Customers%20ORDER%20products.png "Many-to-many relationship (M:N)."){width="348"}
 
-    ![Products HAVE Promotions](Relationship%20Sets/Products%20HAVE%20Promotions.png){width="357"}\
-    Many-to-many relationship (N:M).\
+    ![Customers MAKE Transaction. Many-to-many relationship (M:N).](Relationship%20Sets/Customers%20MAKE%20Transaction.png "Many-to-many relationship (M:N)."){width="357"}
 
-1.2 SQL Database Schema Creation:
+    ![Order Details CONTAIN Products. One-to-many relationship (1:N).](Relationship%20Sets/Order%20Details%20CONTAIN%20Products.png "One-to-many relationship (1:N)."){width="369"}
+
+    ![Products HAVE Promotions. Many-to-many relationship (N:M).](Relationship%20Sets/Products%20HAVE%20Promotions.png "Many-to-many relationship (N:M)."){width="382"}
+
+#### 1.2 SQL Database Schema Creation:
+
+![Logical Database Schema](Logical%20Database%20Schema/Logical%20Database%20Schema.jpg "Logical Database Schema"){fig-align="center"}
+
++------------------------+-------------------------------+------------------------+
+| Entity                 | Attribute                     | Description            |
++:======================:+:=============================:+:======================:+
+| 1.  Suppliers          | [supplier_ID]{.underline}     |                        |
++------------------------+-------------------------------+------------------------+
+|                        | supplier_name                 |                        |
++------------------------+-------------------------------+------------------------+
+|                        | supplier_email                |                        |
++------------------------+-------------------------------+------------------------+
+| 2.  Products           | [product_id]{.underline}      |                        |
++------------------------+-------------------------------+------------------------+
+|                        | category_id                   |                        |
++------------------------+-------------------------------+------------------------+
+|                        | supplier_id                   |                        |
++------------------------+-------------------------------+------------------------+
+|                        | product_sku                   |                        |
++------------------------+-------------------------------+------------------------+
+|                        | product_name                  |                        |
++------------------------+-------------------------------+------------------------+
+|                        | price                         |                        |
++------------------------+-------------------------------+------------------------+
+|                        | product_quantity              |                        |
++------------------------+-------------------------------+------------------------+
+|                        | product_description           |                        |
++------------------------+-------------------------------+------------------------+
+| 3.  Product Categories | [category_id]{.underline}     |                        |
++------------------------+-------------------------------+------------------------+
+|                        | category_name                 |                        |
++------------------------+-------------------------------+------------------------+
+| 4.  Customers          | [customer_id]{.underline}     |                        |
++------------------------+-------------------------------+------------------------+
+|                        | first_name                    |                        |
++------------------------+-------------------------------+------------------------+
+|                        | last_name                     |                        |
++------------------------+-------------------------------+------------------------+
+|                        | email                         |                        |
++------------------------+-------------------------------+------------------------+
+|                        | password                      |                        |
++------------------------+-------------------------------+------------------------+
+|                        | phone_number                  |                        |
++------------------------+-------------------------------+------------------------+
+| 5.  Transactions       | [transaction_id]{.underline}  |                        |
++------------------------+-------------------------------+------------------------+
+|                        | customer_id                   |                        |
++------------------------+-------------------------------+------------------------+
+|                        | order_id                      |                        |
++------------------------+-------------------------------+------------------------+
+|                        | receipt_invoice               |                        |
++------------------------+-------------------------------+------------------------+
+|                        | transaction_method            |                        |
++------------------------+-------------------------------+------------------------+
+|                        | transaction_date              |                        |
++------------------------+-------------------------------+------------------------+
+| 6.  Promotions         | [promotion_id]{.underline}    |                        |
++------------------------+-------------------------------+------------------------+
+|                        | discount_code                 |                        |
++------------------------+-------------------------------+------------------------+
+|                        | discount_rate                 |                        |
++------------------------+-------------------------------+------------------------+
+|                        | discount_start_date           |                        |
++------------------------+-------------------------------+------------------------+
+|                        | discount_end_date             |                        |
++------------------------+-------------------------------+------------------------+
+| 7.  Order details      | [order_detail_id]{.underline} |                        |
++------------------------+-------------------------------+------------------------+
+|                        | order_id                      |                        |
++------------------------+-------------------------------+------------------------+
+|                        | product_id                    |                        |
++------------------------+-------------------------------+------------------------+
+|                        | total_price                   |                        |
++------------------------+-------------------------------+------------------------+
+|                        | order_quantity                |                        |
++------------------------+-------------------------------+------------------------+
+|                        | shipping_address              |                        |
++------------------------+-------------------------------+------------------------+
+|                        | city                          |                        |
++------------------------+-------------------------------+------------------------+
+|                        | postcode                      |                        |
++------------------------+-------------------------------+------------------------+
+
+: Entity Attribute Data Dictionary
+
+| Relationship |       Attribute        | Description |
+|:------------:|:----------------------:|:-----------:|
+|    Order     |        order_id        |             |
+|              |      customer_id       |             |
+|              |       order_date       |             |
+|              | estimate_delivery_date |             |
+|              |      order_status      |             |
+
+: Relationship Attribute Data Dictionary
 
 ```{r}
 
