@@ -14,13 +14,12 @@ editor: visual
 
 ## Database Design and Implementation
 
-1.  E-R Diagram Design:
+1.  E-R Diagram Design:\
+    We created an Entity-Relationship diagram for an e-commerce store by first identifying a total of 7 key entities namely suppliers, customers, products, product categories, order details, transactions and promotions. Relationships were created to better define the connection between two entities which included provide, belong to, order and make. Attributes were created to detail the information held within every entity. Order relationship was given multiple attributes to better explain the nature of the relationship. After analysis of the ER diagram, to efficiently define the data held within shipping address attribute, it was given further attributes and used as a composite attribute for order details.\
+    \
+    Assumptions: Multiple Suppliers provide Multiple Products, Multiple products belong to a single product category, Multiple customers can order multiple products, multiple transactions can be made by a single customer and multiple promotions can be applied to multiple products.![Entity-Relationship Diagram](E-R Diagram/E-R Diagram.jpg)
 
-    We created an Entity-Relationship diagram for an e-commerce store by first identifying a total of 7 key entities namely suppliers, customers, products, product categories, order details, transactions and promotions. Relationships were created to better define the connection between two entities which included provide, belong to, order and make. Attributes were created to detail the information held within every entity. Order relationship was given multiple attributes to better explain the nature of the relationship. After analysis of the ER diagram, to efficiently define the data held within shipping address attribute, it was given further attributes and used as a composite attribute for order details.
-
-    Assumptions: Multiple Suppliers provide Multiple Products, Multiple products belong to a single product category, Multiple customers can order multiple products, multiple transactions can be made by a single customer and multiple promotions can be applied to multiple products.
-
-    ![Entity-Relationship Diagram](E-R%20Diagram/E-R%20Diagram.jpg)
+2.  Relationship Set Design:\
 
 ```{r}
 
