@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 ---
 title: "Data Management Group Assignment"
 author: "DM Group 5"
@@ -19,6 +21,9 @@ editor: visual
 1.  E-R Diagram:\
     We created an Entity-Relationship diagram for an e-commerce store by first identifying a total of 7 key entities namely suppliers, customers, products, product categories, order details, transactions and promotions. Relationships were created to better define the connection between two entities which included provide, belong to, order and make. Attributes were created to detail the information held within every entity. Order relationship was given multiple attributes to better explain the nature of the relationship. After analysis of the ER diagram, to efficiently define the data held within shipping address attribute, it was given further attributes and used as a composite attribute for order details.\
     \
+<<<<<<< HEAD
+    Assumptions: Multiple Suppliers provide Multiple Products, Multiple products belong to a single product category, Multiple customers can order multiple products, multiple customers can make multiple transactions, multiple products can be contained in a single order detail and multiple promotions can be applied to multiple products.
+=======
     Assumptions:
 
     -   The e-commerce store is based in the UK.
@@ -28,6 +33,7 @@ editor: visual
     -   Multiple customers can make multiple transactions.
     -   Multiple products can be contained in a single order detail.
     -   Multiple promotions can be applied to multiple products.
+>>>>>>> 03ab08e84603798bd9d25e29c39111061f097604
 
     ![Entity-Relationship Diagram](E-R%20Diagram/E-R%20Diagram.jpeg){fig-align="left" width="644"}
 
@@ -49,6 +55,87 @@ editor: visual
 
 ![Logical Database Schema](Logical%20Database%20Schema/Logical%20Database%20Schema.jpg "Logical Database Schema"){fig-align="center"}
 
+<<<<<<< HEAD
++------------------------+-------------------------------+-------------+
+| Entity                 | Attribute                     | Description |
++:======================:+:=============================:+:===========:+
+| 1.  Suppliers          | [supplier_ID]{.underline}     |             |
++------------------------+-------------------------------+-------------+
+|                        | supplier_name                 |             |
++------------------------+-------------------------------+-------------+
+|                        | supplier_email                |             |
++------------------------+-------------------------------+-------------+
+| 2.  Products           | [product_id]{.underline}      |             |
++------------------------+-------------------------------+-------------+
+|                        | category_id                   |             |
++------------------------+-------------------------------+-------------+
+|                        | supplier_id                   |             |
++------------------------+-------------------------------+-------------+
+|                        | product_sku                   |             |
++------------------------+-------------------------------+-------------+
+|                        | product_name                  |             |
++------------------------+-------------------------------+-------------+
+|                        | price                         |             |
++------------------------+-------------------------------+-------------+
+|                        | product_quantity              |             |
++------------------------+-------------------------------+-------------+
+|                        | product_description           |             |
++------------------------+-------------------------------+-------------+
+| 3.  Product Categories | [category_id]{.underline}     |             |
++------------------------+-------------------------------+-------------+
+|                        | category_name                 |             |
++------------------------+-------------------------------+-------------+
+| 4.  Customers          | [customer_id]{.underline}     |             |
++------------------------+-------------------------------+-------------+
+|                        | first_name                    |             |
++------------------------+-------------------------------+-------------+
+|                        | last_name                     |             |
++------------------------+-------------------------------+-------------+
+|                        | email                         |             |
++------------------------+-------------------------------+-------------+
+|                        | password                      |             |
++------------------------+-------------------------------+-------------+
+|                        | phone_number                  |             |
++------------------------+-------------------------------+-------------+
+| 5.  Transactions       | [transaction_id]{.underline}  |             |
++------------------------+-------------------------------+-------------+
+|                        | customer_id                   |             |
++------------------------+-------------------------------+-------------+
+|                        | order_id                      |             |
++------------------------+-------------------------------+-------------+
+|                        | receipt_invoice               |             |
++------------------------+-------------------------------+-------------+
+|                        | transaction_method            |             |
++------------------------+-------------------------------+-------------+
+|                        | transaction_date              |             |
++------------------------+-------------------------------+-------------+
+| 6.  Promotions         | [promotion_id]{.underline}    |             |
++------------------------+-------------------------------+-------------+
+|                        | discount_code                 |             |
++------------------------+-------------------------------+-------------+
+|                        | discount_rate                 |             |
++------------------------+-------------------------------+-------------+
+|                        | discount_start_date           |             |
++------------------------+-------------------------------+-------------+
+|                        | discount_end_date             |             |
++------------------------+-------------------------------+-------------+
+| 7.  Order details      | [order_detail_id]{.underline} |             |
++------------------------+-------------------------------+-------------+
+|                        | order_id                      |             |
++------------------------+-------------------------------+-------------+
+|                        | product_id                    |             |
++------------------------+-------------------------------+-------------+
+|                        | total_price                   |             |
++------------------------+-------------------------------+-------------+
+|                        | order_quantity                |             |
++------------------------+-------------------------------+-------------+
+|                        | shipping_address              |             |
++------------------------+-------------------------------+-------------+
+|                        | city                          |             |
++------------------------+-------------------------------+-------------+
+|                        | postcode                      |             |
++------------------------+-------------------------------+-------------+
+=======
 ![Logical Schema Table](Logical%20Schema%20Table/Logical%20Schema%20Table.png "Logical Schema Table"){width="601"}
 
 +------------------------+---------------------+-----------------------------------------+
@@ -192,33 +279,25 @@ editor: visual
 +------------------------+---------------------+-----------------------------------------+
 |                        | postcode            | Postal code of the location             |
 +------------------------+---------------------+-----------------------------------------+
+>>>>>>> 03ab08e84603798bd9d25e29c39111061f097604
 
 : Entity Attribute Data Dictionary
 
-+---------------+------------------------+-------------------------------------+
-| Relationship  | Attribute              | Description                         |
-+:==============+:=======================+:====================================+
-| Order         | order_id               | Primary Key                         |
-|               |                        |                                     |
-|               |                        | Identifier for each unqiue Order    |
-+---------------+------------------------+-------------------------------------+
-|               | customer_id            | Foreign Key                         |
-|               |                        |                                     |
-|               |                        | Identifier for customers since\     |
-|               |                        | multiple orders can come\           |
-|               |                        | from multiple orders.               |
-+---------------+------------------------+-------------------------------------+
-|               | order_date             | Date of order placement             |
-+---------------+------------------------+-------------------------------------+
-|               | estimate_delivery_date | Delivery date of the order          |
-+---------------+------------------------+-------------------------------------+
-|               | order_status           | Classification of the order\        |
-|               |                        | depending on its current status\    |
-|               |                        | i.e., shipped, cancelled or pending |
-+---------------+------------------------+-------------------------------------+
+| Relationship |       Attribute        | Description |
+|:------------:|:----------------------:|:-----------:|
+|    Order     |        order_id        |             |
+|              |      customer_id       |             |
+|              |       order_date       |             |
+|              | estimate_delivery_date |             |
+|              |      order_status      |             |
 
 : Relationship Attribute Data Dictionary
 
+<<<<<<< HEAD
+```{r}
+
+```
+=======
 ## Data Generation and Management
 
 #### 2.1 Synthetic Data Generation:
@@ -254,15 +333,20 @@ Orders and Order Details:\
 This prompt outlines the creation of two interconnected datasets, "Orders" and "Order Details," for an e-commerce platform, necessitating their simultaneous generation to maintain consistency. Within the datasets, we focused on imitating a realistic relationship between orders, customers, and products while incorporating accurate order statuses and delivery timelines. See the following prompt:
 
 ![Orders and Order Details Prompt.](Prompts/Orders%20and%20Order%20Details.png "Orders and Order Details Prompt"){width="437"}
+>>>>>>> 03ab08e84603798bd9d25e29c39111061f097604
 
-Transactions:\
-In this prompt, we linked each transaction to customer and order details, including distinct invoice numbers and specific payment methods, while aligning transaction dates with their respective order dates. See the following prompt:
+```{1 + 1}
+```
 
+<<<<<<< HEAD
+## Data Generation and Management
+=======
 ![Transactions Prompt.](Prompts/Transactions.png "Transactions Prompt"){width="552"}
+>>>>>>> 03ab08e84603798bd9d25e29c39111061f097604
 
-The following prompts enabled us to generate 8 datasets for each entity, setting a strong foundation for robust analysis, given the realistic constraints and patterns put in place.
+#### 2.1 Synthetic Data Generation
 
-#### 2.2 Data Import and Quality Assurance
+### 2.2 Data Import and Quality Assurance
 
 After uploading the data files, the rows and columns of each dataset was displayed using the below code:
 
@@ -462,7 +546,7 @@ CREATE TABLE IF NOT EXISTS 'transactions' (
 
 ## Data Pipeline Generation
 
-#### 3.1 Github Repository and Workflow Setup
+### 3.1 Github Repository and Workflow Setup
 
 ETL (Extract, transform, load)
 
@@ -470,6 +554,7 @@ ETL (Extract, transform, load)
 
 ```
 
-#### 3.2 Github Actions for Continuous Integration
+### 3.2 Github Actions for Continuous Integration
 
 4.  Data Analysis
+>>>>>>> 3d9d95cee00998568d48e38f06b32890d8c6802a
