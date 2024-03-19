@@ -14,9 +14,60 @@ table_names
 for (tablename in table_names){
   print(tablename)
   
+<<<<<<< HEAD
   # Filter files containing "customers" in their names
   table_files <- grep(tablename, data_files, ignore.case = TRUE, value = TRUE)
   print(table_files)
+=======
+  # Check if the email format is correct in the respective column
+  email_format_correct <- grepl(email_pattern, this_file_contents[[email_column]], perl = TRUE)
+  
+  # Print out the results
+  print(paste0("Checking email format for: '", basename(file_path), "'"))
+  if (all(email_format_correct)) {
+    print("All emails are in the correct format.")
+  } else {
+    incorrect_emails <- this_file_contents[!email_format_correct, email_column]
+    print(paste("The following emails are not in the correct format:", toString(incorrect_emails)))
+  }
+}
+
+
+
+
+<<<<<<< HEAD
+=======
+#Check phone number is in format of +44 7XXX-XXX-XXX
+# "customers' dataset contains the phone numbers
+customer_data_path <- "data_uploads/customers.csv"
+customer_data <- read_csv(customer_data_path)
+
+# Define the phone number format
+phone_pattern <- "^\\+44 7\\d{3}-\\d{3}-\\d{3}$"
+
+# Check if the phone format is correct in the specified column
+# Replace 'phone_column_name' with the actual name of the column containing phone numbers
+phone_format_correct <- grepl(phone_pattern, customer_data$phone)
+
+# Printing the results
+cat("Checking phone format for customers dataset:\n")
+if (all(phone_format_correct)) {
+  cat("All phone numbers are in the correct format.\n")
+} else {
+  incorrect_phones <- customer_data$phone_column_name[!phone_format_correct]
+  cat("The following phone numbers are not in the correct format:\n")
+  print(incorrect_phones)
+}
+
+
+>>>>>>> 03ab08e84603798bd9d25e29c39111061f097604
+
+#Date1
+#check date is in DD/MM/YYYY format, this code don't run really fine
+for (variable in data_files) {
+  this_filepath <- paste0("data_uploads/", variable)
+  this_file_contents <- read_csv(this_filepath)
+>>>>>>> ef06af1a12a4f5353f1c80b882c6ce5ab56d80f0
   
   if(tablename == "customers"){
     dbExecute(db_connection, "DROP TABLE IF EXISTS customers")
