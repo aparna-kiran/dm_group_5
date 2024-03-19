@@ -378,14 +378,16 @@ In our e-commerce platform, we extract key characteristics such as total orders,
 # Reading required database
 library(readr)
 library(dplyr)
-customers <- read_csv("data_uploads/customers.csv")
-order_details <- read_csv("data_uploads/order_details.csv")
-orders <- read_csv("data_uploads/orders.csv")
-product_categories <- read_csv("data_uploads/product_categories.csv")
-products <- read_csv("data_uploads/products.csv")
-promotion <- read_csv("data_uploads/promotions.csv")
-suppliers <- read_csv("data_uploads/suppliers.csv")
-transactions <- read_csv("data_uploads/transactions.csv")
+db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"ecommerce.db")
+
+customers <- RSQLite::dbReadTable(db_connection, "customers")
+order_details <- RSQLite::dbReadTable(db_connection, "order_details")
+orders <- RSQLite::dbReadTable(db_connection, "orders")
+product_categories <- RSQLite::dbReadTable(db_connection, "product_categories")
+products <- RSQLite::dbReadTable(db_connection, "products")
+promotions <- RSQLite::dbReadTable(db_connection, "promotions")
+suppliers <- RSQLite::dbReadTable(db_connection, "suppliers")
+transactions <- RSQLite::dbReadTable(db_connection, "transactions")
 ```
 
 ```{r}
@@ -400,7 +402,7 @@ orders$estimated_delivery_date <- as.Date(orders$estimated_delivery_date,
 # Exclude "cancelled" orders and calculate total revenue per year
 orders <- orders %>%
   mutate(
-    order_id = as.character(order_id),
+    order_id = as.numeric(order_id),
   )
 yearly_revenue <- orders %>%
   filter(order_status != "cancelled") %>%  
@@ -548,7 +550,7 @@ Analysing the total revenue across different cities, Belfast emerges on the top 
 # Exclude the cancelled orders 
 # Calculate the numbers for each transaction method used
 transactions <- transactions %>%
-  mutate(order_id = as.character(order_id))
+  mutate(order_id = as.numeric(order_id))
 non_cancelled_orders <- orders %>%
   filter(order_status != "cancelled")
 transactions_summary <- non_cancelled_orders %>%
@@ -781,7 +783,7 @@ print(least_selling_products)
 
 In our e-commerce platform, the products 'The Great Adventure Lfr', 'Smartphone X12 qbk', 'The Great Adventure zve', 'Premium Blender OaQ' and 'Camping Tent UeT' have the lowest sales, with only one unit sold for each.
 
-```{r}
+```{r, warning=FALSE}
 # Filter out cancelled orders 
 non_cancelled_orders <- orders %>%
   filter(order_status != "cancelled")
@@ -820,9 +822,9 @@ best_selling_categories_plot <- ggplot(best_selling_category,
   geom_bar(stat = "identity") +
   geom_text(aes(label = total_sales, y = reorder(category_name, 
                                                  total_sales)), 
-            position = position_dodge(width = 0.9), 
+            position = position_dodge(width = 0.5), 
             hjust = -0.1, 
-            size = 3.5, 
+            size = 2.8, 
             color = "black") +
   labs(title = "Best Selling Product Category",
        x = "Total Sales", 
@@ -908,10 +910,10 @@ supplier_sales <- order_details %>%
 # Convert supplier_id to character in both supplier_sales and 
 # suppliers before joining
 supplier_sales <- supplier_sales %>%
-  mutate(supplier_id = as.character(supplier_id))
+  mutate(supplier_id = as.numeric(supplier_id))
 
 suppliers <- suppliers %>%
-  mutate(supplier_id = as.character(supplier_id))
+  mutate(supplier_id = as.numeric(supplier_id))
 
 # Join with suppliers to get supplier names and select relevant columns
 supplier_sales <- supplier_sales %>%
