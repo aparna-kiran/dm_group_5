@@ -1,20 +1,20 @@
 library(readr)
 library(RSQLite)
 
-data_files <- list.files("data_uploads/Dataset/")
+data_files <- list.files("data_uploads/")
 
 suffix <- "-Table 1"
 
 # Rename files
 for (file in data_files) {
   # Create a new filename
-  new_filename <- paste0("data_uploads/Dataset/", gsub(suffix, "", file))
-  file <- paste0("data_uploads/Dataset/", file)
+  new_filename <- paste0("data_uploads/", gsub(suffix, "", file))
+  file <- paste0("data_uploads/", file)
   # Rename the file
   file.rename(from = file, to = new_filename)
 }
 
-data_files <- list.files("data_uploads/Dataset/")
+data_files <- list.files("data_uploads/")
 
 db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"ecommerce.db")
 
