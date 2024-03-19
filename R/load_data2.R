@@ -1,7 +1,7 @@
 library(readr)
 library(RSQLite)
 
-data_files <- list.files("data_uploads/Dataset/")
+data_files <- list.files("data_uploads/")
 
 suffix <- "-Table 1"
 
@@ -119,7 +119,7 @@ CREATE TABLE 'orders'(
   
   #Writing the csv file contents to the database and
   #creating the table with the table_name
-  RSQLite::dbWriteTable(db_connection,"customers","customers.csv",append=TRUE)
+  RSQLite::dbWriteTable(db_connection,"customers","data_uploads/customers.csv", overwrite=TRUE)
   RSQLite::dbWriteTable(db_connection,"order_details","order_details.csv",append=TRUE)
   RSQLite::dbWriteTable(db_connection,"transactions","transactions.csv",append=TRUE)
   RSQLite::dbWriteTable(db_connection,"products","products.csv",append=TRUE)
@@ -127,5 +127,5 @@ CREATE TABLE 'orders'(
   RSQLite::dbWriteTable(db_connection,"suppliers","supplier.csv",append=TRUE)
   RSQLite::dbWriteTable(db_connection,"promotion","promotion.csv",append=TRUE)
   RSQLite::dbWriteTable(db_connection,"orders","orders.csv",append=TRUE)
-
+print("Job is happening")
 RSQLite::dbDisconnect(db_connection)
