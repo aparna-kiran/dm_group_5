@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 ---
 title: "Data Management Group Assignment"
 author: "DM Group 5"
@@ -475,4 +473,3 @@ ETL (Extract, transform, load)
 #### 3.2 Github Actions for Continuous Integration
 
 4.  Data Analysis
->>>>>>> 3d9d95cee00998568d48e38f06b32890d8c6802a
