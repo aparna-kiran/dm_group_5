@@ -195,27 +195,27 @@ editor: visual
 
 : Entity Attribute Data Dictionary
 
-+--------------+------------------------+-------------------------------------+
-| Relationship | Attribute              | Description                         |
-+:=============+:=======================+:====================================+
-| Order        | order_id               | Primary Key                         |
-|              |                        |                                     |
-|              |                        | Identifier for each unique Order    |
-+--------------+------------------------+-------------------------------------+
-|              | customer_id            | Foreign Key                         |
-|              |                        |                                     |
-|              |                        | Identifier for customers since\     |
-|              |                        | multiple orders can come\           |
-|              |                        | from multiple orders.               |
-+--------------+------------------------+-------------------------------------+
-|              | order_date             | Date of order placement             |
-+--------------+------------------------+-------------------------------------+
-|              | estimate_delivery_date | Delivery date of the order          |
-+--------------+------------------------+-------------------------------------+
-|              | order_status           | Classification of the order\        |
-|              |                        | depending on its current status\    |
-|              |                        | i.e., shipped, cancelled or pending |
-+--------------+------------------------+-------------------------------------+
++---------------+------------------------+-------------------------------------+
+| Relationship  | Attribute              | Description                         |
++:==============+:=======================+:====================================+
+| Order         | order_id               | Primary Key                         |
+|               |                        |                                     |
+|               |                        | Identifier for each unique Order    |
++---------------+------------------------+-------------------------------------+
+|               | customer_id            | Foreign Key                         |
+|               |                        |                                     |
+|               |                        | Identifier for customers since\     |
+|               |                        | multiple orders can come\           |
+|               |                        | from multiple orders.               |
++---------------+------------------------+-------------------------------------+
+|               | order_date             | Date of order placement             |
++---------------+------------------------+-------------------------------------+
+|               | estimate_delivery_date | Delivery date of the order          |
++---------------+------------------------+-------------------------------------+
+|               | order_status           | Classification of the order\        |
+|               |                        | depending on its current status\    |
+|               |                        | i.e., shipped, cancelled or pending |
++---------------+------------------------+-------------------------------------+
 
 : Relationship Attribute Data Dictionary
 
@@ -470,7 +470,7 @@ Duplicate Entries Check:\
 Our script checked for duplicates in the first column, designed to flag any replication of primary keys. The results confirmed that each dataset had unique identifiers across all entries.
 
 Phone Number Format Check:\
-The following code verifies the format of phone number within the \`’Customers” dataset to ensure that they adhere to the specified UK format (+44 7XXX-XXX-XXX). Results suggest the correctness of each phone number, confirming that they align with the format.
+The following code verifies the format of phone number within the "Customers” dataset to ensure that they adhere to the specified UK format (+44 7XXX-XXX-XXX). Results suggest the correctness of each phone number, confirming that they align with the format.
 
 Missing Values Assessment:\
 The script aims to detect missing values in any column. The results imply that no missing values were identified across all entries, thus confirming a complete dataset.
