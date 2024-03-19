@@ -3,6 +3,7 @@ library(RSQLite)
 
 #Data Validation
 count <- 0
+data_files <- list.files("data_uploads/")
 #Check if the first column of each file is a primary
 for (variable in data_files) {
   this_filepath <- paste0("data_uploads/", variable)
@@ -87,8 +88,8 @@ if (count == 5) {
 }
 
 ## Data Importing
-data_files <- list.files("data_uploads/")
-db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"try_ecommerce.db")
+
+db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"ecommerce.db")
 
 dbExecute(db_connection, "DROP TABLE IF EXISTS customers")
 customers <- "

@@ -6,8 +6,17 @@ library(lubridate)
 library(readxl)
 library(scales)
 
+db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"ecommerce.db")
 
 # Reading required database
+customers <- dbReadTable(db_connection, "customers")
+order_details <- dbReadTable(db_connection, "order_details")
+orders <- dbReadTable(db_connection, "orders")
+product_categories <- dbReadTable(db_connection, "product_categories")
+products <- dbReadTable(db_connection, "products")
+promotions <- dbReadTable(db_connection, "promotions")
+suppliers <- dbReadTable(db_connection, "suppliers")
+transactions <- dbReadTable(db_connection, "transactions")
 
 #Standardise date format
 orders$order_date <- as.Date(orders$order_date, format= "%d/%m/%Y")
