@@ -346,143 +346,7 @@ While constructing the schema for our SQL database, we focused on defining the d
 
 Customers Data Validation Code:
 
-```{r}
-dbExecute(db_connection, "DROP TABLE IF EXISTS customers")
-customers <- "
-CREATE TABLE IF NOT EXISTS 'customers' (
-  'customer_id' INT PRIMARY KEY, 
-  'first_name' VARCHAR(50) NOT NULL, 
-  'last_name' VARCHAR(50) NOT NULL,
-  'email' VARCHAR(100) NOT NULL, 
-  'password' VARCHAR(100) NOT NULL, 
-  'phone_number' VARCHAR(20) NOT NULL, 
-);
-"
-```
 
-Suppliers Data Validation Code:
-
-```{r}
-dbExecute(db_connection, "DROP TABLE IF EXISTS suppliers")
-suppliers <- "
-CREATE TABLE IF NOT EXISTS 'suppliers' (
-  'supplier_id' INT PRIMARY KEY,
-  'supplier_name' VARCHAR(100) NOT NULL,
-  'supplier_email' VARCHAR(100) NOT NULL
-);
-"
-```
-
-Product Categories Data Validation Code:
-
-```{r}
-dbExecute(db_connection, "DROP TABLE IF EXISTS product_categories")
-product_categories <- "
-CREATE TABLE IF NOT EXISTS 'product_categories' (
-  'category_id' INT PRIMARY KEY,
-  'category_name' VARCHAR(50) NOT NULL,
-);
-"
-```
-
-Promotions Data Validation Code:
-
-```{r}
-dbExecute(db_connection, "DROP TABLE IF EXISTS promotion")
-promotion <- "
-CREATE TABLE IF NOT EXISTS 'promotion'(
-  'promotion_id' INT PRIMARY KEY,
-  'discount_start_date' DATE NOT NULL,
-  'discount_end_date' DATE NOT NULL,
-  'discount_code' VARCHAR(20),
-  'discount_rate' VARCHAR(3)
-);
-"
-```
-
-Products Data Validation Code:
-
-```{r}
-dbExecute(db_connection, "DROP TABLE IF EXISTS products")
-products <- "
-CREATE TABLE IF NOT EXISTS 'products' (
-  'product_id' INT PRIMARY KEY,
-  'category_id' INT NOT NULL,
-  'supplier_id' INT NOT NULL,
-  'product_name' VARCHAR(100) NOT NULL,
-  'product_sku' VARCHAR(20),
-  'product_description' VARCHAR(500),
-  'price' DECIMAL(1000,2) NOT NULL,
-  'product_quantity' INT,
-  FOREIGN KEY ('category_id')
-  REFERENCES product_categories ('category_id'),
-  FOREIGN KEY ('supplier_id')
-  REFERENCES suppliers ('supplier_id')
-);
-"
-```
-
-Orders Data Validation Code:
-
-```{r}
-dbExecute(db_connection, "DROP TABLE IF EXISTS orders")
-orders <- "
-CREATE TABLE IF NOT EXISTS 'orders'(
-  'order_id' INT PRIMARY KEY,
-  'customer_id' INT NOT NULL,
-  'estimated_delivery_date' DATE NOT NULL,
-  'order_date' DATE NOT NULL,
-  'order_status' VARCHAR(100) NOT NULL,
-  'total_price' INT NOT NULL,
-  FOREIGN KEY('customer_id')
-  REFERENCES customers('customer_id'),
-  FOREIGN KEY('shipping_address_id')
-  REFERENCES addresses('address_id')
-);
-"
-```
-
-Order Details Data Validation Code:
-
-```{r}
-dbExecute(db_connection, "DROP TABLE IF EXISTS order_details")
-order_details <- "
-CREATE TABLE IF NOT EXISTS 'order_details' (
-  'order_detail_id' INT PRIMARY KEY,
-  'order_id' INT NOT NULL,
-  'product_id' INT NOT NULL, 
-  'order_quantity' INT, 
-  'product_price' DECIMAL(10, 2) NOT NULL,
-  'shipping_address' VARCHAR(250) NOT NULL,
-  'city' VARCHAR(50) NOT NULL,
-  'postcode' VARCHAR(10) NOT NULL,
-  FOREIGN KEY ('product_id')
-  REFERENCES products ('product_id'),
-  FOREIGN KEY ('order_id')
-  REFERENCES orders ('order_id')
-);
-"
-```
-
-Transactions Data Validation Code:
-
-```{r}
-dbExecute(db_connection, "DROP TABLE IF EXISTS transactions")
-transactions <- "
-CREATE TABLE IF NOT EXISTS 'transactions' (
-  'transaction_id' INT PRIMARY KEY,
-  'customer_id' INT NOT NULL,
-  'order_id' INT NOT NULL,
-  'receipt_invoice' VARCHAR(20) NOT NULL,
-  'transaction_method' TEXT NOT NULL,
-  'transaction_date' DATE NOT NULL,
-  FOREIGN KEY ('customer_id') 
-  REFERENCES customers('customer_id'),
-  FOREIGN KEY ('order_id') 
-  REFERENCES orders('order_id')
-);
-"
-```
 
 In the above code snippets, referential integrity is effectively established through the careful definition of primary and foreign key constraints across various tables within a relational database. For example, the 'orders' table references the 'customers' table via a foreign key constraint on 'customer_id', ensuring that each order is linked to an existing customer. Similarly, the 'order_details' table contains foreign keys that reference both the 'products' table (through 'product_id') and the 'orders' table (through 'order_id'), guaranteeing that order details cannot exist without a corresponding product and order. This pattern is consistently applied across other tables, such as 'products', which references 'product_categories' and 'suppliers'; and 'transactions', which links back to 'customers' and 'orders'. These foreign key constraints ensure that relationships between tables are strictly maintained, preventing orphaned records and preserving the logical integrity of the database schema. Each foreign key declaration not only enforces referential integrity but also delineates the relational architecture of the database, illustrating a well-structured and coherent relationship model among the data entities.
 
@@ -536,24 +400,31 @@ In our ecommerce platform, we extract key characteristics such as total orders, 
 
 ```{r}
 # Reading required database
-customers <- read.csv("data_uploads/customers.csv")
-order_details <- read.csv("data_uploads/order_details.csv")
-orders <- read.csv("data_uploads/orders.csv")
-product_categories <- read.csv("data_uploads/product_categories.csv")
-products <- read.csv("data_uploads/products.csv")
-promotion <- read.csv("data_uploads/promotion.csv")
-suppliers <- read.csv("data_uploads/supplier.csv")
-transactions <- read.csv("data_uploads/transactions.csv")
+library(readr)
+library(dplyr)
+customers <- read_csv("data_uploads/customers.csv")
+order_details <- read_csv("data_uploads/order_details.csv")
+orders <- read_csv("data_uploads/orders.csv")
+product_categories <- read_csv("data_uploads/product_categories.csv")
+products <- read_csv("data_uploads/products.csv")
+promotion <- read_csv("data_uploads/promotions.csv")
+suppliers <- read_csv("data_uploads/suppliers.csv")
+transactions <- read_csv("data_uploads/transactions.csv")
 ```
 
 ```{r}
 #Standardise date format
 orders$order_date <- as.Date(orders$order_date, format= "%d/%m/%Y")
 orders$estimated_delivery_date <- as.Date(orders$estimated_delivery_date, format = "%d/%m/%Y")
+
 ```
 
 ```{r}
 # Exclude "cancelled" orders and calculate total revenue per year
+orders <- orders %>%
+  mutate(
+    order_id = as.character(order_id),
+  )
 yearly_revenue <- orders %>%
   filter(order_status != "cancelled") %>%  
   inner_join(order_details, by = "order_id") %>%
@@ -667,6 +538,8 @@ Analysing the total revenue across different cities, Belfast emerges on the top 
 
 ```{r}
 # Excluding the cancelled orders and calculate the numbers for each transaction method used
+transactions <- transactions %>%
+  mutate(order_id = as.character(order_id))
 non_cancelled_orders <- orders %>%
   filter(order_status != "cancelled")
 transactions_summary <- non_cancelled_orders %>%
@@ -720,7 +593,6 @@ Total order numbers has the lowest value in 2021 and peak value in 2022, startin
 
 ```{r}
 # Calculate total orders per season for 4 different years, excluding cancelled orders
-
 detailed_seasonal_orders_quantity <- orders %>%
   filter(order_status != "cancelled") %>%
   inner_join(order_details, by = "order_id") %>%
@@ -959,17 +831,14 @@ print(best_selling_categories_per_season)
 In the fall, Groceries lead the best-selling product category with 120 units, followed by Fashion at 103, and Sports & Outdoors at 83 units. Beauty & Personal Care and Home & Kitchen also perform well with 80 and 74 units respectively. In the spring, Groceries again top the list with 113 units, while Sports & Outdoors rise to a close second with 103 units, overtaking Fashion which is at 99 units. Toys & Games and Books show strong sales in spring, at 91 and 90 units, indicating a surge in leisure and educational activities. This pattern suggests that essentials like groceries have a steady demand, while other categories like Sports & Outdoors and Books gain seasonal traction.
 
 ```{r}
-# Ensure order_date is Date type
 orders <- orders %>%
   mutate(
     order_date = as.Date(order_date, format = "%Y-%m-%d"),
     year = year(order_date)
   )
-
 # Exclude "cancelled" orders
 non_cancelled_orders <- orders %>%
   filter(order_status != "cancelled")
-
 
 # Calculate the total sales per supplier per year
 supplier_sales <- order_details %>%
@@ -979,19 +848,26 @@ supplier_sales <- order_details %>%
   summarise(total_sales = sum(order_quantity, na.rm = TRUE)) %>%
   ungroup()
 
+# Convert supplier_id to character in both supplier_sales and suppliers before joining
+supplier_sales <- supplier_sales %>%
+  mutate(supplier_id = as.character(supplier_id))
 
+suppliers <- suppliers %>%
+  mutate(supplier_id = as.character(supplier_id))
+
+# Join with suppliers to get supplier names and select relevant columns
 supplier_sales <- supplier_sales %>%
   inner_join(suppliers, by = "supplier_id") %>%
   select(year, supplier_name, total_sales) %>%
   arrange(year, desc(total_sales))
 
-# For each year, get the best-selling suppliers
+# For each year, identify the best-selling suppliers
 best_selling_suppliers_per_year <- supplier_sales %>%
   group_by(year) %>%
   slice_max(order_by = total_sales, n = 1) %>%
   ungroup()
-
 print(best_selling_suppliers_per_year)
+
 ```
 
 The top supplier sales per year show 'Martin-Barnett' leading in 2020 with 15 sales, a dip to 11 sales with 'Archer LLC' in 2021, a Harvey-Hines at 17 sales among suppliers in 2022, and a return to 15 sales with 'Perkins Mathews and Ray' in 2023.
