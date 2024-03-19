@@ -1,6 +1,22 @@
 library(readr)
 library(RSQLite)
 
+<<<<<<< HEAD
+data_files <- list.files("data_uploads/")
+
+suffix <- "-Table 1"
+
+# Rename files
+for (file in data_files) {
+  # Create a new filename
+  new_filename <- paste0("data_uploads/Dataset/", gsub(suffix, "", file))
+  file <- paste0("data_uploads/Dataset/", file)
+  # Rename the file
+  file.rename(from = file, to = new_filename)
+}
+
+=======
+>>>>>>> de4b26a176ad93c6d7b2b838a6db96c0c9c70603
 data_files <- list.files("data_uploads/")
 db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"try_ecommerce.db")
 
@@ -112,6 +128,19 @@ CREATE TABLE IF NOT EXISTS 'orders'(
 );
 "
   
+<<<<<<< HEAD
+  #Writing the csv file contents to the database and
+  #creating the table with the table_name
+  RSQLite::dbWriteTable(db_connection,"customers","data_uploads/customers.csv", overwrite=TRUE)
+  RSQLite::dbWriteTable(db_connection,"order_details","order_details.csv",append=TRUE)
+  RSQLite::dbWriteTable(db_connection,"transactions","transactions.csv",append=TRUE)
+  RSQLite::dbWriteTable(db_connection,"products","products.csv",append=TRUE)
+  RSQLite::dbWriteTable(db_connection,"product_categories","product_categories.csv",append=TRUE)
+  RSQLite::dbWriteTable(db_connection,"suppliers","supplier.csv",append=TRUE)
+  RSQLite::dbWriteTable(db_connection,"promotion","promotion.csv",append=TRUE)
+  RSQLite::dbWriteTable(db_connection,"orders","orders.csv",append=TRUE)
+print("Job is happening")
+=======
 #Writing the csv file contents to the database and
 #creating the table with the table_name
   RSQLite::dbWriteTable(db_connection,"customers","data_uploads/customers.csv",append=TRUE)
@@ -211,4 +240,5 @@ if (all(phone_format_correct)) {
   print(incorrect_phones)
 }
 
+>>>>>>> de4b26a176ad93c6d7b2b838a6db96c0c9c70603
 RSQLite::dbDisconnect(db_connection)
