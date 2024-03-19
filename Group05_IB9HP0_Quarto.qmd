@@ -195,27 +195,27 @@ editor: visual
 
 : Entity Attribute Data Dictionary
 
-+---------------+------------------------+-------------------------------------+
-| Relationship  | Attribute              | Description                         |
-+:==============+:=======================+:====================================+
-| Order         | order_id               | Primary Key                         |
-|               |                        |                                     |
-|               |                        | Identifier for each unique Order    |
-+---------------+------------------------+-------------------------------------+
-|               | customer_id            | Foreign Key                         |
-|               |                        |                                     |
-|               |                        | Identifier for customers since\     |
-|               |                        | multiple orders can come\           |
-|               |                        | from multiple orders.               |
-+---------------+------------------------+-------------------------------------+
-|               | order_date             | Date of order placement             |
-+---------------+------------------------+-------------------------------------+
-|               | estimate_delivery_date | Delivery date of the order          |
-+---------------+------------------------+-------------------------------------+
-|               | order_status           | Classification of the order\        |
-|               |                        | depending on its current status\    |
-|               |                        | i.e., shipped, cancelled or pending |
-+---------------+------------------------+-------------------------------------+
++--------------+------------------------+-------------------------------------+
+| Relationship | Attribute              | Description                         |
++:=============+:=======================+:====================================+
+| Order        | order_id               | Primary Key                         |
+|              |                        |                                     |
+|              |                        | Identifier for each unique Order    |
++--------------+------------------------+-------------------------------------+
+|              | customer_id            | Foreign Key                         |
+|              |                        |                                     |
+|              |                        | Identifier for customers since\     |
+|              |                        | multiple orders can come\           |
+|              |                        | from multiple orders.               |
++--------------+------------------------+-------------------------------------+
+|              | order_date             | Date of order placement             |
++--------------+------------------------+-------------------------------------+
+|              | estimate_delivery_date | Delivery date of the order          |
++--------------+------------------------+-------------------------------------+
+|              | order_status           | Classification of the order\        |
+|              |                        | depending on its current status\    |
+|              |                        | i.e., shipped, cancelled or pending |
++--------------+------------------------+-------------------------------------+
 
 : Relationship Attribute Data Dictionary
 
@@ -466,7 +466,7 @@ We employed a series of data validation checks to ensure data quality and assess
 Primary Key Validation:\
 We verified that the first column of each dataset contained unique identifiers, which is essential for primary keys. Our validation checks confirmed that there were no duplicate entries, ensuring the integrity of our data model.
 
-Duplicate Entries Check: \
+Duplicate Entries Check:\
 Our script checked for duplicates in the first column, designed to flag any replication of primary keys. The results confirmed that each dataset had unique identifiers across all entries.
 
 Phone Number Format Check:\
