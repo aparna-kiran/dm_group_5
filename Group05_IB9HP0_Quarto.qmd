@@ -460,13 +460,15 @@ CREATE TABLE IF NOT EXISTS 'transactions' (
 "
 ```
 
+In the above code snippets, referential integrity is effectively established through the careful definition of primary and foreign key constraints across various tables within a relational database. For example, the 'orders' table references the 'customers' table via a foreign key constraint on 'customer_id', ensuring that each order is linked to an existing customer. Similarly, the 'order_details' table contains foreign keys that reference both the 'products' table (through 'product_id') and the 'orders' table (through 'order_id'), guaranteeing that order details cannot exist without a corresponding product and order. This pattern is consistently applied across other tables, such as 'products', which references 'product_categories' and 'suppliers'; and 'transactions', which links back to 'customers' and 'orders'. These foreign key constraints ensure that relationships between tables are strictly maintained, preventing orphaned records and preserving the logical integrity of the database schema. Each foreign key declaration not only enforces referential integrity but also delineates the relational architecture of the database, illustrating a well-structured and coherent relationship model among the data entities.
+
 Data Validation-Quarto:\
 We employed a series of data validation checks to ensure data quality and assess data integrity. Below are the steps taken as well as their outcomes.
 
 Primary Key Validation:\
 We verified that the first column of each dataset contained unique identifiers, which is essential for primary keys. Our validation checks confirmed that there were no duplicate entries, ensuring the integrity of our data model.
 
-Duplicate Entries Check: \
+Duplicate Entries Check:\
 Our script checked for duplicates in the first column, designed to flag any replication of primary keys. The results confirmed that each dataset had unique identifiers across all entries.
 
 Phone Number Format Check:\
