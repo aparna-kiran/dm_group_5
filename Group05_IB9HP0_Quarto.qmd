@@ -20,7 +20,6 @@ editor: visual
 
     Assumptions: Multiple Suppliers provide Multiple Products, Multiple products belong to a single product category, Multiple customers can order multiple products, multiple transactions can be made by a single customer and multiple promotions can be applied to multiple products.
 
-    ![Entity-Relationship Diagram](E-R Diagram/E-R Diagram.jpg)
 
 ```{r}
 
