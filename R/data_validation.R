@@ -2,7 +2,6 @@ library(readr)
 
 # Get a list of file names in the directory
 directory <- "data_uploads/"
-<<<<<<< HEAD
 
 data_files <- list.files(directory, pattern = "\\.csv$")
 data_files
@@ -148,8 +147,9 @@ for (tablename in table_names){
           print("Product Categories are appending")
         }
       }
-=======
-
+    }
+  }
+}
 data_files <- list.files(directory, pattern = "\\.csv$")
 data_files
 
@@ -161,11 +161,10 @@ table_names
 for (tablename in table_names){
   print(tablename)
   
-<<<<<<< HEAD
   # Filter files containing "customers" in their names
   table_files <- grep(tablename, data_files, ignore.case = TRUE, value = TRUE)
   print(table_files)
-=======
+
   # Check if the email format is correct in the respective column
   email_format_correct <- grepl(email_pattern, this_file_contents[[email_column]], perl = TRUE)
   
@@ -182,8 +181,6 @@ for (tablename in table_names){
 
 
 
-<<<<<<< HEAD
-=======
 #Check phone number is in format of +44 7XXX-XXX-XXX
 # "customers' dataset contains the phone numbers
 customer_data_path <- "data_uploads/customers.csv"
@@ -206,15 +203,11 @@ if (all(phone_format_correct)) {
   print(incorrect_phones)
 }
 
-
->>>>>>> 03ab08e84603798bd9d25e29c39111061f097604
-
 #Date1
 #check date is in DD/MM/YYYY format, this code don't run really fine
 for (variable in data_files) {
   this_filepath <- paste0("data_uploads/", variable)
   this_file_contents <- read_csv(this_filepath)
->>>>>>> ef06af1a12a4f5353f1c80b882c6ce5ab56d80f0
   
   if(tablename == "customers"){
     dbExecute(db_connection, "DROP TABLE IF EXISTS customers")
@@ -245,7 +238,6 @@ for (variable in data_files) {
       table_filename <- grep(tablename, filename, ignore.case = TRUE, value = TRUE)
       
       print(table_filename)
->>>>>>> bb110dfaf145491062491f088a5575f7983457dc
     }
   }
 
