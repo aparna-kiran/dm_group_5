@@ -30,6 +30,8 @@ jobs:
       - name: Execute R script
         run: |
           Rscript R/data_importing.R
+      - name: Execute data analysis R script
+        run: |
           Rscript R/data_transformation.R
       - name: Add files
         run: |
