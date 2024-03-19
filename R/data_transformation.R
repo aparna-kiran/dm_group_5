@@ -1,5 +1,4 @@
 library(RSQLite)
-
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -9,14 +8,6 @@ library(scales)
 
 
 # Reading required database
-customers <- read.csv("customers.csv")
-order_details <- read.csv("order_details.csv")
-orders <- read.csv("orders.csv")
-product_categories <- read.csv("product_categories.csv")
-products <- read.csv("products.csv")
-promotion <- read.csv("promotion.csv")
-suppliers <- read.csv("supplier.csv")
-transactions <- read.csv("transactions.csv")
 
 #Standardise date format
 orders$order_date <- as.Date(orders$order_date, format= "%d/%m/%Y")
