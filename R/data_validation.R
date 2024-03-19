@@ -1,209 +1,151 @@
-
-# All the codes are basically working, but some of them have some small issues
-
 library(readr)
 
 # Get a list of file names in the directory
-data_files <- list.files("data_uploads/")
+directory <- "data_uploads/"
+
+data_files <- list.files(directory, pattern = "\\.csv$")
 data_files
 
-#simplify the tables by removing the suffix "-Table 1.csv"
-#suffix <- "-Table 1.csv"
-#data_files <- gsub("-Table 1.csv","", data_files)
-#data_files
-#no need for this, its creating errors
+db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"try_ecommerce.db")
 
+table_names <- dbListTables(db_connection)
+table_names
 
-# To import each csv file into the database table
-for (file in data_files) {
-  this_filepath <- paste0("data_uploads/", file)
-  this_file_contents <- readr::read_csv(this_filepath)
-  number_of_rows <- nrow(this_file_contents)
-  number_of_columns <- ncol(this_file_contents)
-  #To print the number of columns and rows of each dataset
-  print(paste0("The file: ",file,
-               " has: ",
-               format(number_of_rows,big.mark = ","),
-               " rows and ",
-               number_of_columns," columns"))
-  table_name <- gsub(".csv","",file)
-}
-
-
-
-# Check if the first column of each file is a primary
-for (variable in data_files) {
-  this_filepath <- paste0("data_uploads/", variable)
-  this_file_contents <- readr::read_csv(this_filepath)
-  number_of_rows <- nrow(this_file_contents)
-  print(paste0("Checking for: ", variable))
-  print(paste0(" is ", nrow(unique(this_file_contents[, 1]))==number_of_rows))
-}
-# transaction result is False, which it should be True to check primary key
-
-
-
-#Check duplicates
-for (variable in data_files) {
-  # Construct the file path
-  this_filepath <- paste0("data_uploads/", variable)
-  # Read the CSV file
-  this_file_contents <- readr::read_csv(this_filepath)
-  # Check for duplicate rows for just the first column
-  duplicates <- duplicated(this_file_contents[[1]])
-  # Count the number of duplicates
-  number_of_duplicates <- sum(duplicates)
-  # Print the result
-  print(paste0("Checking for duplicates in '", variable, "': ", number_of_duplicates, " duplicates found"))
-}
-#This code is working, but for transaction, its still showing duplicates even I only did for the first column
-
-
-# Check missing values
-# Loop over the files and print the number of missing values for each one
-for (file_path in data_files) {
-  this_filepath <- paste0("data_uploads/", file_path)
-  # Read the CSV file
-  data <- readr::read_csv(this_filepath)
+for (tablename in table_names){
+  print(tablename)
   
-  # Read the data from the file
+  # Filter files containing "customers" in their name
+  table_files <- grep(tablename, data_files, ignore.case = TRUE, value = TRUE)
+  print(table_files)
   
-  print(data)
-  # Calculate the number of missing values for each column
-  missing_values <- colSums(is.na(data))
-  
-  # Print the results for the current file
-  print(paste("Missing values in", basename(file_path), ":"))
-  print(missing_values)
-  print("")
-}
-# It has problems as its printing the entire set of results for all files every time it is called
-
-
-
-
-#Check email format, both of the codes have some errors
-#First code
-for (variable in data_files) {
-  this_filepath <- paste0("data_uploads/", variable)
-  this_file_contents <- readr::read_csv(this_filepath)
-  # Define a regex pattern for the email format
-  email_pattern <- "^[a-zA-Z]+\\.[a-zA-Z]+@email\\.com$"
-  # Check if the email format is correct in the first column
-  email_format_correct <- grepl(email_pattern, this_file_contents[[1]], perl = TRUE)
-  # Print out the results
-  print(paste0("Checking email format for: '", variable, "'"))
-  if (all(email_format_correct)) {
-    print("All emails are in the correct format.")
-  } else {
-    print("Some emails are not in the correct format.")
-  }
-}
-
-#Second Codes
-for (variable in data_files) {
-    this_filepath <- paste0("data_uploads/", variable)
-    this_file_contents <- readr::read_csv(this_filepath)  
-  # Determine which dataset we are checking and set the appropriate pattern
-  if (grepl("customers", variable)) {
-    # Customer email pattern
-    email_column <- "email" 
-    email_pattern <- "^[a-zA-Z]+\\.[a-zA-Z]+@email\\.com$"
-  } else if (grepl("suppliers", file_path)) {
-    # Supplier email pattern
-    email_column <- "supplier_email"  
-    email_pattern <- "^.+@(email\\.com|email\\.net)$"
-  } else {
-    next  # Skip the file if it's neither customer nor supplier
-  }
-  
-  # Check if the email format is correct in the respective column
-  email_format_correct <- grepl(email_pattern, this_file_contents[[email_column]], perl = TRUE)
-  
-  # Print out the results
-  print(paste0("Checking email format for: '", basename(file_path), "'"))
-  if (all(email_format_correct)) {
-    print("All emails are in the correct format.")
-  } else {
-    incorrect_emails <- this_file_contents[!email_format_correct, email_column]
-    print(paste("The following emails are not in the correct format:", toString(incorrect_emails)))
-  }
-}
-
-
-
-
-#Check phone number is in format of +44 7XXX-XXX-XXX
-# "customers' dataset contains the phone numbers
-customer_data_path <- "data_uploads/customers.csv"
-customer_data <- read_csv(customer_data_path)
-
-# Define the phone number format
-phone_pattern <- "^\\+44 7\\d{3}-\\d{3}-\\d{3}$"
-
-# Check if the phone format is correct in the specified column
-# Replace 'phone_column_name' with the actual name of the column containing phone numbers
-phone_format_correct <- grepl(phone_pattern, customer_data$phone)
-
-# Printing the results
-cat("Checking phone format for customers dataset:\n")
-if (all(phone_format_correct)) {
-  cat("All phone numbers are in the correct format.\n")
-} else {
-  incorrect_phones <- customer_data$phone_column_name[!phone_format_correct]
-  cat("The following phone numbers are not in the correct format:\n")
-  print(incorrect_phones)
-}
-
-
-
-#Date1
-#check date is in DD/MM/YYYY format, this code don't run really fine
-for (variable in data_files) {
-  this_filepath <- paste0("data_uploads/", variable)
-  this_file_contents <- read_csv(this_filepath)
-  
-  # Check for the presence of a column named 'date'
-  if ('date' %in% names(this_file_contents)) {
-    # Define a regex pattern for the date format
-    date_pattern <- "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}$"
-    
-    # Check if the date format is correct in the date column
-    date_format_correct <- grepl(date_pattern, this_file_contents[["date"]], perl = TRUE)
-    
-    # Print out the results
-    print(paste0("Checking date format for '", variable, "' in 'date' column:"))
-    if (all(date_format_correct)) {
-      print("All dates are in the correct format.")
-    } else {
-      print("Some dates are not in the correct format.")
-    }
-  }
-}
-
-
-#Date2
-for (variable in data_files) {
-  this_filepath <- paste0("data_uploads/", variable)
-  this_file_contents <- read_csv(this_filepath)
-  
-  # Check for columns containing the word 'date'
-  date_columns <- grep("\\bdate\\b", names(this_file_contents), value = TRUE)
-  
-  if (length(date_columns) > 0) {
-    # Define a regex pattern for the date format
-    date_pattern <- "^([0-2][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$"
-    
-    for (date_column in date_columns) {
-      # Check if the date format is correct in the date column
-      date_format_correct <- grepl(date_pattern, this_file_contents[[date_column]])
+  if(length(table_files) > 1){
+    if(tablename == "customers"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
       
-      # Print out the results
-      cat("Checking date format for '", variable, "' in '", date_column, "' column:\n")
-      if (all(date_format_correct)) {
-        cat("All dates are in the correct format (DD/MM/YYYY).\n")
-      } else {
-        cat("Some dates are not in the correct format (DD/MM/YYYY).\n")
+        id_length <- max(nchar(existing_dataset$customer_id))
+        existing_dataset$customer_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$customer_id))
+        
+        filtered_dataset <- dataset[!dataset$customer_id %in% existing_dataset$customer_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, filtered_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Customers are appending")
+        }
+      }
+    }
+    if(tablename == "products"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$product_id))
+        existing_dataset$product_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$product_id))
+        
+        filtered_dataset <- dataset[!dataset$product_id %in% existing_dataset$product_id, ]
+        
+        RSQLite::dbWriteTable(db_connection,tablename, filtered_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Products are appending")
+        }
+      }
+    }
+    if(tablename == "order_details"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$order_detail_id))
+        existing_dataset$order_detail_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$order_detail_id))
+        
+        filtered_dataset <- dataset[!dataset$order_detail_id %in% existing_dataset$order_detail_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, new_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Order Details are appending")
+        }
+      }
+    }
+    if(tablename == "orders"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$order_id))
+        existing_dataset$order_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$order_id))
+        
+        filtered_dataset <- dataset[!dataset$order_id %in% existing_dataset$order_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, new_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Orders are appending")
+        }
+      }
+    }
+    if(tablename == "promotions"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$promotion_id))
+        existing_dataset$promotion_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$promotion_id))
+        
+        filtered_dataset <- dataset[!dataset$promotion_id %in% existing_dataset$promotion_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, new_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Promotions are appending")
+        }
+      }
+    }
+    if(tablename == "suppliers"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$supplier_id))
+        existing_dataset$supplier_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$supplier_id))
+        
+        filtered_dataset <- dataset[!dataset$supplier_id %in% existing_dataset$supplier_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, new_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Suppliers are appending")
+        }
+      }
+    }
+    if(tablename == "transactions"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$transaction_id))
+        existing_dataset$transaction_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$transaction_id))
+        
+        filtered_dataset <- dataset[!dataset$transaction_id %in% existing_dataset$transaction_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, new_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Transactions are appending")
+        }
+      }
+    }
+    if(tablename == "product_categories"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$category_id))
+        existing_dataset$category_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$category_id))
+        
+        filtered_dataset <- dataset[!dataset$category_id %in% existing_dataset$category_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, new_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Product Categories are appending")
+        }
       }
     }
   }
