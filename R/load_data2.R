@@ -1,22 +1,6 @@
 library(readr)
 library(RSQLite)
 
-<<<<<<< HEAD
-data_files <- list.files("data_uploads/")
-
-suffix <- "-Table 1"
-
-# Rename files
-for (file in data_files) {
-  # Create a new filename
-  new_filename <- paste0("data_uploads/Dataset/", gsub(suffix, "", file))
-  file <- paste0("data_uploads/Dataset/", file)
-  # Rename the file
-  file.rename(from = file, to = new_filename)
-}
-
-=======
->>>>>>> de4b26a176ad93c6d7b2b838a6db96c0c9c70603
 data_files <- list.files("data_uploads/")
 db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"try_ecommerce.db")
 
@@ -127,34 +111,21 @@ CREATE TABLE IF NOT EXISTS 'orders'(
   REFERENCES addresses('address_id')
 );
 "
-  
-<<<<<<< HEAD
-  #Writing the csv file contents to the database and
-  #creating the table with the table_name
-  RSQLite::dbWriteTable(db_connection,"customers","data_uploads/customers.csv", overwrite=TRUE)
-  RSQLite::dbWriteTable(db_connection,"order_details","order_details.csv",append=TRUE)
-  RSQLite::dbWriteTable(db_connection,"transactions","transactions.csv",append=TRUE)
-  RSQLite::dbWriteTable(db_connection,"products","products.csv",append=TRUE)
-  RSQLite::dbWriteTable(db_connection,"product_categories","product_categories.csv",append=TRUE)
-  RSQLite::dbWriteTable(db_connection,"suppliers","supplier.csv",append=TRUE)
-  RSQLite::dbWriteTable(db_connection,"promotion","promotion.csv",append=TRUE)
-  RSQLite::dbWriteTable(db_connection,"orders","orders.csv",append=TRUE)
-print("Job is happening")
-=======
+
 #Writing the csv file contents to the database and
 #creating the table with the table_name
-  RSQLite::dbWriteTable(db_connection,"customers","data_uploads/customers.csv",append=TRUE)
-  RSQLite::dbWriteTable(db_connection,"order_details","data_uploads/order_details.csv",append=TRUE)
-  RSQLite::dbWriteTable(db_connection,"transactions","data_uploads/transactions.csv",append=TRUE)
-  RSQLite::dbWriteTable(db_connection,"products","data_uploads/products.csv",append=TRUE)
-  RSQLite::dbWriteTable(db_connection,"product_categories","data_uploads/product_categories.csv",append=TRUE)
-  RSQLite::dbWriteTable(db_connection,"suppliers","data_uploads/supplier.csv",append=TRUE)
-  RSQLite::dbWriteTable(db_connection,"promotion","data_uploads/promotion.csv",append=TRUE)
-  RSQLite::dbWriteTable(db_connection,"orders","data_uploads/orders.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"customers","data_uploads/customers.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"order_details","data_uploads/order_details.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"transactions","data_uploads/transactions.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"products","data_uploads/products.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"product_categories","data_uploads/product_categories.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"suppliers","data_uploads/supplier.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"promotion","data_uploads/promotion.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"orders","data_uploads/orders.csv",append=TRUE)
 
-  
+
 #Data Validation
-  
+
 #Check if the first column of each file is a primary
 for (variable in data_files) {
   this_filepath <- paste0("data_uploads/", variable)
@@ -174,26 +145,26 @@ for (variable in data_files) {
   print(paste0("Checking for duplicates in '", variable, "': ", number_of_duplicates, " duplicates found"))
 }
 
-  
-#Check missing values
-  for (file_path in data_files) {
-    this_filepath <- paste0("data_uploads/", file_path)
-    # Read the CSV file
-    data <- readr::read_csv(this_filepath)
-    
-    # Read the data from the file
-    
-    print(data)
-    # Calculate the number of missing values for each column
-    missing_values <- colSums(is.na(data))
-    
-    # Print the results for the current file
-    print(paste("Missing values in", basename(file_path), ":"))
-    print(missing_values)
-    print("")
-  }
 
+#Check missing values
+for (file_path in data_files) {
+  this_filepath <- paste0("data_uploads/", file_path)
+  # Read the CSV file
+  data <- readr::read_csv(this_filepath)
   
+  # Read the data from the file
+  
+  print(data)
+  # Calculate the number of missing values for each column
+  missing_values <- colSums(is.na(data))
+  
+  # Print the results for the current file
+  print(paste("Missing values in", basename(file_path), ":"))
+  print(missing_values)
+  print("")
+}
+
+
 #Check email is in format of xxx@xxx.com
 # "customers' dataset contains the phone numbers
 customer_data_path <- "data_uploads/customers.csv"
@@ -240,5 +211,5 @@ if (all(phone_format_correct)) {
   print(incorrect_phones)
 }
 
->>>>>>> de4b26a176ad93c6d7b2b838a6db96c0c9c70603
 RSQLite::dbDisconnect(db_connection)
+
