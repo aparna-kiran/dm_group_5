@@ -195,15 +195,12 @@ editor: visual
 
 : Entity Attribute Data Dictionary
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 +---------------+------------------------+-------------------------------------+
 | Relationship  | Attribute              | Description                         |
 +:==============+:=======================+:====================================+
 | Order         | order_id               | Primary Key                         |
 |               |                        |                                     |
-|               |                        | Identifier for each unqiue Order    |
+|               |                        | Identifier for each unique Order    |
 +---------------+------------------------+-------------------------------------+
 |               | customer_id            | Foreign Key                         |
 |               |                        |                                     |
@@ -219,33 +216,6 @@ editor: visual
 |               |                        | depending on its current status\    |
 |               |                        | i.e., shipped, cancelled or pending |
 +---------------+------------------------+-------------------------------------+
-=======
->>>>>>> 96d10446849b5925d62d68aa922d1ddc4d6bf958
-+--------------+------------------------+-------------------------------------+
-| Relationship | Attribute              | Description                         |
-+:=============+:=======================+:====================================+
-| Order        | order_id               | Primary Key                         |
-|              |                        |                                     |
-|              |                        | Identifier for each unique Order    |
-+--------------+------------------------+-------------------------------------+
-|              | customer_id            | Foreign Key                         |
-|              |                        |                                     |
-|              |                        | Identifier for customers since\     |
-|              |                        | multiple orders can come\           |
-|              |                        | from multiple orders.               |
-+--------------+------------------------+-------------------------------------+
-|              | order_date             | Date of order placement             |
-+--------------+------------------------+-------------------------------------+
-|              | estimate_delivery_date | Delivery date of the order          |
-+--------------+------------------------+-------------------------------------+
-|              | order_status           | Classification of the order\        |
-|              |                        | depending on its current status\    |
-|              |                        | i.e., shipped, cancelled or pending |
-+--------------+------------------------+-------------------------------------+
-<<<<<<< HEAD
-=======
->>>>>>> 6eaaadec5a613392b7972d187dd98ade8344a16f
->>>>>>> 96d10446849b5925d62d68aa922d1ddc4d6bf958
 
 : Relationship Attribute Data Dictionary
 
