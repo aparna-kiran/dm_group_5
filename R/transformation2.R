@@ -9,14 +9,14 @@ library(scales)
 
 
 # Reading required database
-customers <- read.csv("customers.csv")
-order_details <- read.csv("order_details.csv")
-orders <- read.csv("orders.csv")
-product_categories <- read.csv("product_categories.csv")
-products <- read.csv("products.csv")
-promotion <- read.csv("promotion.csv")
-suppliers <- read.csv("supplier.csv")
-transactions <- read.csv("transactions.csv")
+customers <- read.csv("data_uploads/customers.csv")
+order_details <- read.csv("data_uploads/order_details.csv")
+orders <- read.csv("data_uploads/orders.csv")
+product_categories <- read.csv("data_uploads/product_categories.csv")
+products <- read.csv("data_uploads/products.csv")
+promotion <- read.csv("data_uploads/promotions.csv")
+suppliers <- read.csv("data_uploads/suppliers.csv")
+transactions <- read.csv("data_uploads/transactions.csv")
 
 #Standardise date format
 orders$order_date <- as.Date(orders$order_date, format= "%d/%m/%Y")
