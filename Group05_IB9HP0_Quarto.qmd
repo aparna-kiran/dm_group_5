@@ -48,6 +48,8 @@ editor: visual
 
 ![Logical Database Schema](Logical%20Database%20Schema/Logical%20Database%20Schema.jpg "Logical Database Schema"){fig-align="center"}
 
+![Logical Schema Table](Logical Schema Table/Logical Schema Table.png "Logical Schema Table"){width="601"}
+
 +------------------------+---------------------+-----------------------------------------+
 | Entity                 | Attribute           | Description                             |
 +:=======================+:====================+:========================================+
@@ -72,7 +74,9 @@ editor: visual
 |                        |                     | many-to-one cardinality (N:1)\          |
 |                        |                     | with product categories                 |
 +------------------------+---------------------+-----------------------------------------+
-|                        | supplier_id         | Foreign Key identifier for suppliers\   |
+|                        | supplier_id         | Foreign Key                             |
+|                        |                     |                                         |
+|                        |                     | Identifier for suppliers\               |
 |                        |                     | since product has a\                    |
 |                        |                     | many-to-many cardinality (N:M)\         |
 |                        |                     | with suppliers                          |
@@ -178,7 +182,10 @@ editor: visual
 +------------------------+---------------------+-----------------------------------------+
 |                        | order_quantity      | Number of orders                        |
 +------------------------+---------------------+-----------------------------------------+
-|                        | shipping_address    | Delivery address of the order           |
+|                        | shipping_address    | Composite attribute containing \        |
+|                        |                     | address line 1 and address line 2       |
+|                        |                     |                                         |
+|                        |                     | Delivery address of the order           |
 +------------------------+---------------------+-----------------------------------------+
 |                        | city                | City location of the order              |
 +------------------------+---------------------+-----------------------------------------+
