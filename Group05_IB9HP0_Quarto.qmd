@@ -14,32 +14,247 @@ editor: visual
 
 ## Database Design and Implementation
 
-1.  E-R Diagram Design:
+#### 1.1 E-R Diagram Design:
 
-    We created an Entity-Relationship diagram for an e-commerce store by first identifying a total of 7 key entities namely suppliers, customers, products, product categories, order details, transactions and promotions. Relationships were created to better define the connection between two entities which included provide, belong to, order and make. Attributes were created to detail the information held within every entity. Order relationship was given multiple attributes to better explain the nature of the relationship. After analysis of the ER diagram, to efficiently define the data held within shipping address attribute, it was given further attributes and used as a composite attribute for order details.
+1.  E-R Diagram:\
+    We created an Entity-Relationship diagram for an e-commerce store by first identifying a total of 7 key entities namely suppliers, customers, products, product categories, order details, transactions and promotions. Relationships were created to better define the connection between two entities which included provide, belong to, order and make. Attributes were created to detail the information held within every entity. Order relationship was given multiple attributes to better explain the nature of the relationship. After analysis of the ER diagram, to efficiently define the data held within shipping address attribute, it was given further attributes and used as a composite attribute for order details.\
+    \
+    Assumptions:
 
-    Assumptions: Multiple Suppliers provide Multiple Products, Multiple products belong to a single product category, Multiple customers can order multiple products, multiple transactions can be made by a single customer and multiple promotions can be applied to multiple products.
+    -   Multiple suppliers provide multiple products.\
+    -   Multiple products belong to a single product category.\
+    -   Multiple customers can order multiple products.\
+    -   Multiple customers can make multiple transactions.\
+    -   Multiple products can be contained in a single order detail.\
+    -   Multiple promotions can be applied to multiple products.
 
-    ![Entity-Relationship Diagram](E-R%20Diagram/E-R%20Diagram.jpg)
+    ![Entity-Relationship Diagram](E-R%20Diagram/E-R%20Diagram.jpeg)
 
-```{r}
+2.  Relationship Sets:
 
-```
+    ![Suppliers PROVIDE products. Many-to-many relationship (M:N).](Relationship%20Sets/Suppliers%20PROVIDE%20products.png "Many-to-many relationship (M:N)."){width="305"}
 
-1.2 SQL Database Schema Creation
+    ![Products BELONG TO Product Categories. Many-to-one relationship (N:1).](Relationship%20Sets/Products%20BELONG%20TO%20Product%20Categories.png "Many-to-one relationship (N:1)."){width="373"}
 
-```{r}
+    ![Customers ORDER products. Many-to-many relationship (M:N).](Relationship%20Sets/Customers%20ORDER%20products.png "Many-to-many relationship (M:N)."){width="348"}
 
-```
+    ![Customers MAKE Transaction. Many-to-many relationship (M:N).](Relationship%20Sets/Customers%20MAKE%20Transaction.png "Many-to-many relationship (M:N)."){width="357"}
 
-```{1 + 1}
-```
+    ![Order Details CONTAIN Products. One-to-many relationship (1:N).](Relationship%20Sets/Order%20Details%20CONTAIN%20Products.png "One-to-many relationship (1:N)."){width="369"}
+
+    ![Products HAVE Promotions. Many-to-many relationship (N:M).](Relationship%20Sets/Products%20HAVE%20Promotions.png "Many-to-many relationship (N:M)."){width="382"}
+
+#### 1.2 SQL Database Schema Creation:
+
+![Logical Database Schema](Logical%20Database%20Schema/Logical%20Database%20Schema.jpg "Logical Database Schema"){fig-align="center"}
+
++------------------------+---------------------+-----------------------------------------+
+| Entity                 | Attribute           | Description                             |
++:=======================+:====================+:========================================+
+| 1.  Suppliers          | supplier_ID         | Primary Key                             |
+|                        |                     |                                         |
+|                        |                     | Identifier for each unqiue supplier     |
++------------------------+---------------------+-----------------------------------------+
+|                        | supplier_name       | Name of the supplier                    |
++------------------------+---------------------+-----------------------------------------+
+|                        | supplier_email      | Email Address of the supplier           |
++------------------------+---------------------+-----------------------------------------+
+|                        |                     |                                         |
++------------------------+---------------------+-----------------------------------------+
+| 2.  Products           | product_id          | Primary Key                             |
+|                        |                     |                                         |
+|                        |                     | Identifier for each unqiue Product      |
++------------------------+---------------------+-----------------------------------------+
+|                        | category_id         | Foreign Key                             |
+|                        |                     |                                         |
+|                        |                     | Identifier for product categories\      |
+|                        |                     | since product has a\                    |
+|                        |                     | many-to-one cardinality (N:1)\          |
+|                        |                     | with product categories                 |
++------------------------+---------------------+-----------------------------------------+
+|                        | supplier_id         | Foreign Key identifier for suppliers\   |
+|                        |                     | since product has a\                    |
+|                        |                     | many-to-many cardinality (N:M)\         |
+|                        |                     | with suppliers                          |
++------------------------+---------------------+-----------------------------------------+
+|                        | product_sku         | Unique code assigned to\                |
+|                        |                     | each product for inventory tracking\    |
+|                        |                     | and management                          |
++------------------------+---------------------+-----------------------------------------+
+|                        | product_name        | Name of the product                     |
++------------------------+---------------------+-----------------------------------------+
+|                        | price               | Price of the product                    |
++------------------------+---------------------+-----------------------------------------+
+|                        | product_quantity    | Number of products                      |
++------------------------+---------------------+-----------------------------------------+
+|                        | product_description | Short Description\                      |
+|                        |                     | of the product                          |
++------------------------+---------------------+-----------------------------------------+
+|                        |                     |                                         |
++------------------------+---------------------+-----------------------------------------+
+| 3.  Product Categories | category_id         | Primary Key                             |
+|                        |                     |                                         |
+|                        |                     | Identifier for each unqiue\             |
+|                        |                     | product category                        |
++------------------------+---------------------+-----------------------------------------+
+|                        | category_name       | Name of the product category            |
++------------------------+---------------------+-----------------------------------------+
+|                        |                     |                                         |
++------------------------+---------------------+-----------------------------------------+
+| 4.  Customers          | customer_id         | Primary Key                             |
+|                        |                     |                                         |
+|                        |                     | Identifier for each unqiue customer     |
++------------------------+---------------------+-----------------------------------------+
+|                        | first_name          | First Name of the customer              |
++------------------------+---------------------+-----------------------------------------+
+|                        | last_name           | Last Name of the customer               |
++------------------------+---------------------+-----------------------------------------+
+|                        | email               | Email Address of the customer           |
++------------------------+---------------------+-----------------------------------------+
+|                        | password            | Account Password of the customer        |
++------------------------+---------------------+-----------------------------------------+
+|                        | phone_number        | Phone Number of the customer            |
++------------------------+---------------------+-----------------------------------------+
+|                        |                     |                                         |
++------------------------+---------------------+-----------------------------------------+
+| 5.  Transactions       | transaction_id      | Primary Key                             |
+|                        |                     |                                         |
+|                        |                     | Identifier for each unqiue\             |
+|                        |                     | transaction                             |
++------------------------+---------------------+-----------------------------------------+
+|                        | customer_id         | Foreign Key                             |
+|                        |                     |                                         |
+|                        |                     | Identifier for customers\               |
+|                        |                     | since transactions has a\               |
+|                        |                     | many-to-many cardinality (N:M)\         |
+|                        |                     | with product categories                 |
++------------------------+---------------------+-----------------------------------------+
+|                        | order_id            | Foreign Key                             |
+|                        |                     |                                         |
+|                        |                     | Identifier for Orders\                  |
+|                        |                     | since multiple transactions\            |
+|                        |                     | can have multiple orders.               |
++------------------------+---------------------+-----------------------------------------+
+|                        | receipt_invoice     | Invoice of the transaction              |
++------------------------+---------------------+-----------------------------------------+
+|                        | transaction_method  | Chosen method of transaction            |
++------------------------+---------------------+-----------------------------------------+
+|                        | transaction_date    | Date of transaction                     |
++------------------------+---------------------+-----------------------------------------+
+|                        |                     |                                         |
++------------------------+---------------------+-----------------------------------------+
+| 6.  Promotions         | promotion_id        | Primary Key                             |
+|                        |                     |                                         |
+|                        |                     | Identifier for each\                    |
+|                        |                     | unqiue promotion                        |
++------------------------+---------------------+-----------------------------------------+
+|                        | discount_code       | Unique code for the discount            |
++------------------------+---------------------+-----------------------------------------+
+|                        | discount_rate       | Percentage of discount                  |
++------------------------+---------------------+-----------------------------------------+
+|                        | discount_start_date | Start date of the discount              |
++------------------------+---------------------+-----------------------------------------+
+|                        | discount_end_date   | End Date of the discount                |
++------------------------+---------------------+-----------------------------------------+
+|                        |                     |                                         |
++------------------------+---------------------+-----------------------------------------+
+| 7.  Order details      | order_detail_id     | Primary Key                             |
+|                        |                     |                                         |
+|                        |                     | Identifier for each unqiue Order detail |
++------------------------+---------------------+-----------------------------------------+
+|                        | order_id            | Foreign Key                             |
+|                        |                     |                                         |
+|                        |                     | Identifier for Orders since\            |
+|                        |                     | multiple order details can\             |
+|                        |                     | have multiple orders.                   |
++------------------------+---------------------+-----------------------------------------+
+|                        | product_id          | Foreign Key                             |
+|                        |                     |                                         |
+|                        |                     | Identifier for Products since\          |
+|                        |                     | multiple order details can\             |
+|                        |                     | have multiple order details.            |
++------------------------+---------------------+-----------------------------------------+
+|                        | total_price         | Total price of all the orders           |
++------------------------+---------------------+-----------------------------------------+
+|                        | order_quantity      | Number of orders                        |
++------------------------+---------------------+-----------------------------------------+
+|                        | shipping_address    | Delivery address of the order           |
++------------------------+---------------------+-----------------------------------------+
+|                        | city                | City location of the order              |
++------------------------+---------------------+-----------------------------------------+
+|                        | postcode            | Postal code of the location             |
++------------------------+---------------------+-----------------------------------------+
+
+: Entity Attribute Data Dictionary
+
++---------------+------------------------+-------------------------------------+
+| Relationship  | Attribute              | Description                         |
++:==============+:=======================+:====================================+
+| Order         | order_id               | Primary Key                         |
+|               |                        |                                     |
+|               |                        | Identifier for each unqiue Order    |
++---------------+------------------------+-------------------------------------+
+|               | customer_id            | Foreign Key                         |
+|               |                        |                                     |
+|               |                        | Identifier for customers since\     |
+|               |                        | multiple orders can come\           |
+|               |                        | from multiple orders.               |
++---------------+------------------------+-------------------------------------+
+|               | order_date             | Date of order placement             |
++---------------+------------------------+-------------------------------------+
+|               | estimate_delivery_date | Delivery date of the order          |
++---------------+------------------------+-------------------------------------+
+|               | order_status           | Classification of the order\        |
+|               |                        | depending on its current status\    |
+|               |                        | i.e., shipped, cancelled or pending |
++---------------+------------------------+-------------------------------------+
+
+: Relationship Attribute Data Dictionary
 
 ## Data Generation and Management
 
-### 2.1 Synthetic Data Generation
+#### 2.1 Synthetic Data Generation:
 
-### 2.2 Data Import and Quality Assurance
+To generate synthetic data for our e-commerce database, we utilised ChatGPT. Our approach involved providing ChatGPT with detailed prompts specifying the attributes, relationships, and constraints relevant to each database entity. These prompts ensured that the data generated would reflect realistic e-commerce scenarios while maintaining consistency across entities. 
+
+Customers:\
+We constrained the "Customers" dataset to consist of UK phone numbers, as well as names with matching emails, ensuring a dataset that would closely resemble an actual customer database in the UK. See the following prompt:
+
+![Customers Prompt.](Prompts/Customers.png "Customers Prompt")
+
+Suppliers:\
+In the "Suppliers" data set, we ensured that supplier names matched email formats. See the following prompt:
+
+![Suppliers Prompt.](Prompts/Suppliers.png "Suppliers Prompt")
+
+Product Categories:\
+The prompt is for the generation of "Product Categories", with 8 unique category identifiers and corresponding names across 8 entries. See the following prompt:
+
+![Product Categories Prompt.](Prompts/Product%20Categories.png "Product Categories Prompt")
+
+Promotions:\
+For the "Promotions" entity, we focused on generating realistic discount codes and rates, alongside logically constrained start, and end dates for the discounts. See the following prompt:
+
+![Promotions Prompt.](Prompts/Promotions.png "Promotions Prompt")
+
+Products:\
+The prompt describes generating a "Products" dataset for an e-commerce platform, featuring unique product IDs, associated category and supplier IDs, product names, SKUs, descriptions, prices, and stock quantities, across 1000 rows. See the following prompt:
+
+![Products Prompt.](Prompts/Products.png "Products Prompt")
+
+Orders and Order Details:\
+This prompt outlines the creation of two interconnected datasets, "Orders" and "Order Details," for an e-commerce platform, necessitating their simultaneous generation to maintain consistency. Within the datasets, we focused on imitating a realistic relationship between orders, customers, and products while incorporating accurate order statuses and delivery timelines. See the following prompt:
+
+![Orders and Order Details Prompt.](Prompts/Orders%20and%20Order%20Details.png "Orders and Order Details Prompt")
+
+Transactions:\
+In this prompt, we linked each transaction to customer and order details, including distinct invoice numbers and specific payment methods, while aligning transaction dates with their respective order dates. See the following prompt:
+
+![Transactions Prompt.](Prompts/Transactions.png "Transactions Prompt")
+
+The following prompts enabled us to generate 8 datasets for each entity, setting a strong foundation for robust analysis, given the realistic constraints and patterns put in place.
+
+#### 2.2 Data Import and Quality Assurance
 
 After uploading the data files, the rows and columns of each dataset was displayed using the below code:
 
@@ -96,7 +311,7 @@ RSQLite::dbDisconnect(db_connection)
 
 ## 3 Data Pipeline Generation
 
-### 3.1 Github Repository and Workflow Setup
+#### 3.1 Github Repository and Workflow Setup
 
 ETL (Extract, transform, load)
 
@@ -104,6 +319,6 @@ ETL (Extract, transform, load)
 
 ```
 
-### 3.2 Github Actions for Continuous Integration
+#### 3.2 Github Actions for Continuous Integration
 
 4.  Data Analysis
