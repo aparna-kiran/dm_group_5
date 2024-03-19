@@ -308,7 +308,8 @@ for (file in data_files) {
   
   #Writing the csv file contents to the database and
   #creating the table with the table_name
-  RSQLite::dbWriteTable(db_connection,table_name,this_file_contents,overwrite=TRUE)
+  RSQLite::dbWriteTable(db_connection,table_name,
+                        this_file_contents,overwrite=TRUE)
   
   #To list the database tables
   RSQLite::dbListTables(db_connection)
@@ -321,8 +322,6 @@ Populate SQL database:\
 While constructing the schema for our SQL database, we focused on defining the data types and structures that would best represent the nature of each field. Data types such as VARCHAR were chosen to impose limits on the length of text-based fields. Meanwhile, for numerical fields, INT and DECIMAL types were used to accurately capture integer and floating-point numbers, respectively. By carefully aligning data types with the intended data structure, we create a framework that ensures data is stored in an organised manner.
 
 Customers Data Validation Code:
-
-
 
 In the above code snippets, referential integrity is effectively established through the careful definition of primary and foreign key constraints across various tables within a relational database. For example, the 'orders' table references the 'customers' table via a foreign key constraint on 'customer_id', ensuring that each order is linked to an existing customer. Similarly, the 'order_details' table contains foreign keys that reference both the 'products' table (through 'product_id') and the 'orders' table (through 'order_id'), guaranteeing that order details cannot exist without a corresponding product and order. This pattern is consistently applied across other tables, such as 'products', which references 'product_categories' and 'suppliers'; and 'transactions', which links back to 'customers' and 'orders'. These foreign key constraints ensure that relationships between tables are strictly maintained, preventing orphaned records and preserving the logical integrity of the database schema. Each foreign key declaration not only enforces referential integrity but also delineates the relational architecture of the database, illustrating a well-structured and coherent relationship model among the data entities.
 
@@ -350,7 +349,7 @@ We executed a script to ensure that email addresses within out data set follow a
 
 ETL (Extract, transform, load)
 
-```{r}
+```{r, include=FALSE}
 #install.packages("dplyr")
 #install.packages("ggplot2")
 #install.packages("tidyr")
@@ -375,7 +374,7 @@ library(scales)
 
 In our e-commerce platform, we extract key characteristics such as total orders, total revenue, best-selling products, and least-selling products, along with identifying top-selling suppliers. We analyze these results across different time series, including seasonally and quarterly, to uncover patterns and trends. Additionally, we examine total revenue by region and assess transaction methods used by various customers. This comprehensive analysis allows us to generate more valuable insights, enhancing our understanding of market dynamics and customer preferences.
 
-```{r}
+```{r, include=FALSE}
 # Reading required database
 library(readr)
 library(dplyr)
@@ -392,7 +391,8 @@ transactions <- read_csv("data_uploads/transactions.csv")
 ```{r}
 #Standardise date format
 orders$order_date <- as.Date(orders$order_date, format= "%d/%m/%Y")
-orders$estimated_delivery_date <- as.Date(orders$estimated_delivery_date, format = "%d/%m/%Y")
+orders$estimated_delivery_date <- as.Date(orders$estimated_delivery_date, 
+                                          format = "%d/%m/%Y")
 
 ```
 
@@ -407,7 +407,8 @@ yearly_revenue <- orders %>%
   inner_join(order_details, by = "order_id") %>%
   mutate(year = year(order_date)) %>%
   group_by(year) %>%
-  summarize(total_revenue = sum(product_price * order_quantity), .groups = 'drop')
+  summarize(total_revenue = sum(product_price * order_quantity), 
+            .groups = 'drop')
 print(yearly_revenue)
 
 # Adjusting the total_revenue to be in thousands for visualization
@@ -415,15 +416,22 @@ yearly_revenue$total_revenue <- yearly_revenue$total_revenue / 1000
 
 # Plotting line chart for the yearly revenue with y-axis values in thousands
 
-yearly_revenue_plot <- ggplot(yearly_revenue, aes(x = as.factor(year), y = total_revenue, group = 1)) +
+yearly_revenue_plot <- ggplot(yearly_revenue, aes(x = as.factor(year), 
+                                                  y = total_revenue, 
+                                                  group = 1)) +
   geom_line(color = "blue") +
   geom_point(color = "red", size = 3) +
-  labs(title = "Total Revenue per Year (in Thousands)", x = "Year", y = "Total Revenue (Thousands)") +
+  labs(title = "Total Revenue per Year (in Thousands)", 
+       x = "Year", y = "Total Revenue (Thousands)") +
   theme_minimal() +
   scale_y_continuous(labels = label_number(suffix = "K"), 
-                     limits = c(0, max(yearly_revenue$total_revenue, na.rm = TRUE) + 10), 
-                     breaks = seq(0, max(yearly_revenue$total_revenue, na.rm = TRUE) + 10, by = 20))
-ggsave(plot = yearly_revenue_plot, filename = "images/yearly_revenue_plot.png", width = 10, height = 6, dpi = 300)
+                     limits = c(0, max(yearly_revenue$total_revenue, 
+                                       na.rm = TRUE) + 10), 
+                     breaks = seq(0, max(yearly_revenue$total_revenue, 
+                                         na.rm = TRUE) + 10, by = 20))
+ggsave(plot = yearly_revenue_plot, 
+       filename = "images/yearly_revenue_plot.png", 
+       width = 10, height = 6, dpi = 300)
 print(yearly_revenue_plot)
 ```
 
@@ -436,20 +444,27 @@ quarterly_revenue <- orders %>%
   inner_join(order_details, by = "order_id") %>%
   mutate(quarter = paste("Q", quarter(order_date), sep="")) %>%
   group_by(quarter) %>%
-  summarize(total_revenue = sum(product_price * order_quantity), .groups = 'drop') %>%
+  summarize(total_revenue = sum(product_price * order_quantity), 
+            .groups = 'drop') %>%
   mutate(quarter = factor(quarter, levels = c("Q1", "Q2", "Q3", "Q4")))
 print(quarterly_revenue)
 
 
-quarterly_revenue_all_years_plot <- ggplot(quarterly_revenue, aes(x = quarter, y = total_revenue, group = 1)) +
+quarterly_revenue_all_years_plot <- ggplot(quarterly_revenue, 
+                                           aes(x = quarter, 
+                                               y = total_revenue, 
+                                               group = 1)) +
   geom_line() +
   geom_point() +
-  labs(title = "Total Revenue per Quarter Across All Years", x = "Quarter", y = "Total Revenue") +
+  labs(title = "Total Revenue per Quarter Across All Years", 
+       x = "Quarter", y = "Total Revenue") +
   theme_minimal() +
   scale_y_continuous(limits = c(0, NA))  # Start y-axis at 0
 
 
-ggsave(plot = quarterly_revenue_all_years_plot, filename = "images/quarterly_revenue_all_years_plot.png", width = 10, height = 6, dpi = 300)
+ggsave(plot = quarterly_revenue_all_years_plot, 
+       filename = "images/quarterly_revenue_all_years_plot.png", 
+       width = 10, height = 6, dpi = 300)
 print(quarterly_revenue_all_years_plot)
 ```
 
@@ -460,27 +475,37 @@ The figure displaying the total revenue per quarter across all years (2020-2023)
 detailed_quarterly_revenue <- orders %>%
   filter(order_status != "cancelled") %>%  # Exclude cancelled orders
   inner_join(order_details, by = "order_id") %>%
-  mutate(year_quarter = paste(year(order_date), "Q", quarter(order_date), sep="")) %>%
+  mutate(year_quarter = paste(year(order_date), "Q", 
+                              quarter(order_date), sep="")) %>%
   group_by(year_quarter) %>%
-  summarize(total_revenue = sum(product_price * order_quantity), .groups = 'drop') %>%
+  summarize(total_revenue = sum(product_price * order_quantity), 
+            .groups = 'drop') %>%
   arrange(year_quarter)
 print(detailed_quarterly_revenue)
 
 
 detailed_quarterly_revenue <- detailed_quarterly_revenue %>%
   mutate(year = substr(year_quarter, 1, 4),
-         quarter = paste("Q", substr(year_quarter, 6, 7), sep=""))  # Add "Q" prefix to quarter
+         quarter = paste("Q", substr(year_quarter, 6, 7), sep=""))  
+# Add "Q" prefix to quarter
 
 
 # Plot the line chart for quarterly revenue for each year
-quarterly_revenue_plot <- ggplot(detailed_quarterly_revenue, aes(x = quarter, y = total_revenue, group = year, color = year)) +
+quarterly_revenue_plot <- ggplot(detailed_quarterly_revenue, 
+                                 aes(x = quarter, y = total_revenue, 
+                                     group = year, color = year)) +
   geom_line() +  
   geom_point() +
-  labs(title = "Total Revenue by Quarter (2020-2023)", x = "Quarter", y = "Total Revenue") +
-  scale_color_manual(values = c("2020" = "blue", "2021" = "red", "2022" = "green", "2023" = "purple")) +  
+  labs(title = "Total Revenue by Quarter (2020-2023)", 
+       x = "Quarter", y = "Total Revenue") +
+  scale_color_manual(values = c("2020" = "blue", 
+                                "2021" = "red", "2022" = "green", 
+                                "2023" = "purple")) +  
   theme_minimal()
 
-ggsave(plot = quarterly_revenue_plot, filename = "images/quarterly_revenue_plot.png", width = 10, height = 6, dpi = 300)
+ggsave(plot = quarterly_revenue_plot, 
+       filename = "images/quarterly_revenue_plot.png", 
+       width = 10, height = 6, dpi = 300)
 print(quarterly_revenue_plot )
 ```
 
@@ -495,18 +520,24 @@ non_cancelled_orders <- orders %>%
 total_revenue_by_city <- non_cancelled_orders %>%
   inner_join(order_details, by = "order_id") %>%
   group_by(city) %>%
-  summarize(total_revenue = sum(product_price * order_quantity), .groups = 'drop')
+  summarize(total_revenue = sum(product_price * order_quantity), 
+            .groups = 'drop')
 print(total_revenue_by_city)
 
 # Plot the bar chart for total revenue by city
-revenue_by_city_plot <- ggplot(total_revenue_by_city, aes(x = reorder(city, total_revenue), y = total_revenue, fill = city)) +
+revenue_by_city_plot <- ggplot(total_revenue_by_city, 
+                               aes(x = reorder(city, total_revenue), 
+                                   y = total_revenue, fill = city)) +
   geom_col() +
-  labs(title = "Total Revenue by City between 2020-2023", x = "City", y = "Total Revenue") +
+  labs(title = "Total Revenue by City between 2020-2023", 
+       x = "City", y = "Total Revenue") +
   theme_minimal() +
   coord_flip() +
   guides(fill = "none")  # Removes the legend
 
-ggsave(plot = revenue_by_city_plot, filename = "images/revenue_by_city_plot.png", width = 10, height = 6, dpi = 300)
+ggsave(plot = revenue_by_city_plot, 
+       filename = "images/revenue_by_city_plot.png", 
+       width = 10, height = 6, dpi = 300)
 print(revenue_by_city_plot)
 
 ```
@@ -514,7 +545,8 @@ print(revenue_by_city_plot)
 Analysing the total revenue across different cities, Belfast emerges on the top with approximately £41,000, while the other cities exhibit varied results. Cardiff and Birmingham also showcase strong revenues, with around £39,000 and £36,000, respectively. London and Manchester, notable for their economic significance, are at the lower end among the first 10 cities listed, each with around £24,000 to £25,000. Geographically, this indicates a diverse economic landscape, with the highest revenues not necessarily in the traditionally dominant economic centers of the UK.
 
 ```{r}
-# Excluding the cancelled orders and calculate the numbers for each transaction method used
+# Exclude the cancelled orders 
+# Calculate the numbers for each transaction method used
 transactions <- transactions %>%
   mutate(order_id = as.character(order_id))
 non_cancelled_orders <- orders %>%
@@ -528,9 +560,16 @@ transactions_summary <- non_cancelled_orders %>%
 max_transactions <- max(transactions_summary$number_of_transactions)
 
 # Bar chart for usage of transaction methods
-transaction_methods_plot <- ggplot(transactions_summary, aes(x = reorder(transaction_method, number_of_transactions), y = number_of_transactions, fill = transaction_method)) +
+transaction_methods_plot <- ggplot(transactions_summary, 
+                                   aes(x = reorder(transaction_method, 
+                                                   number_of_transactions), 
+                                                             
+                                       y = number_of_transactions, 
+                                                             
+                                       fill=transaction_method)) +
   geom_col(width = 0.5) +  
-  geom_text(aes(label = number_of_transactions), vjust = -0.3, color = "black", size = 3.5) + 
+  geom_text(aes(label = number_of_transactions), 
+            vjust = -0.3, color = "black", size = 3.5) + 
   labs(title = "Transaction Methods Based on Customers", 
        x = "Transaction Method",
        y = "Number of Transactions",
@@ -538,7 +577,9 @@ transaction_methods_plot <- ggplot(transactions_summary, aes(x = reorder(transac
   theme_minimal() +
   scale_y_continuous(breaks = seq(0, max_transactions, by = 150))
 
-ggsave(plot = transaction_methods_plot, filename = "images/transaction_methods_plot.png", width = 10, height = 6, dpi = 300)
+ggsave(plot = transaction_methods_plot, 
+       filename = "images/transaction_methods_plot.png", 
+       width = 10, height = 6, dpi = 300)
 print(transaction_methods_plot)
 ```
 
@@ -551,25 +592,31 @@ yearly_orders_quantity <- orders %>%
   inner_join(order_details, by = "order_id") %>%
   mutate(year = year(order_date)) %>%
   group_by(year) %>%
-  summarize(total_quantity = sum(order_quantity), .groups = 'drop')  # Summarize by total quantity
+  summarize(total_quantity = sum(order_quantity), .groups = 'drop')  
+# Summarize by total quantity
 print(yearly_orders_quantity)
 
 # Plotting the total orders per year
-yearly_orders_plot <- ggplot(yearly_orders_quantity, aes(x = as.factor(year), y = total_quantity, group = 1)) +
+yearly_orders_plot <- ggplot(yearly_orders_quantity, 
+                             aes(x = as.factor(year), 
+                                 y = total_quantity, group = 1)) +
   geom_line(color = "blue") +
   geom_point(color = "red", size = 3) +
   labs(title = "Total Orders per Year", x = "Year", y = "Total Quantity Sold") +
   theme_minimal() +
   scale_y_continuous(limits = c(0, NA), breaks = seq(0, 500, by = 100))
 
-ggsave(plot = yearly_orders_plot, filename = "images/yearly_orders_plot.png", width = 10, height = 6, dpi = 300)
+ggsave(plot = yearly_orders_plot, 
+       filename = "images/yearly_orders_plot.png", 
+       width = 10, height = 6, dpi = 300)
 print(yearly_orders_plot)
 ```
 
 Total order numbers has the lowest value in 2021 and peak value in 2022, starting with a slight decline from 627 orders in 2020 to 567 in 2021, followed by a significant increase to 643 orders in 2022, and a subsequent decrease to 631 orders in 2023.
 
 ```{r}
-# Calculate total orders per season for 4 different years, excluding cancelled orders
+# Calculate total orders per season for 4 different years
+# Excluding cancelled orders
 detailed_seasonal_orders_quantity <- orders %>%
   filter(order_status != "cancelled") %>%
   inner_join(order_details, by = "order_id") %>%
@@ -581,16 +628,22 @@ detailed_seasonal_orders_quantity <- orders %>%
            month %in% c(6, 7, 8) ~ "Summer",
            month %in% c(9, 10, 11) ~ "Fall"
          )) %>%
-  mutate(season = factor(season, levels = c("Fall", "Winter", "Spring", "Summer"))) %>%
+  mutate(season = factor(season, 
+                         levels = c("Fall", "Winter", 
+                                    "Spring", "Summer"))) %>%
   group_by(year, season) %>%
-  summarize(total_quantity = sum(order_quantity), .groups = 'drop')  # Summarize by total quantity
+  summarize(total_quantity = sum(order_quantity), 
+            .groups = 'drop')  # Summarize by total quantity
 print(detailed_seasonal_orders_quantity)
 
 # Plotting the  seasonal orders for each year
-seasonal_orders_plot <- ggplot(detailed_seasonal_orders_quantity, aes(x = season, y = total_quantity, color = as.factor(year), group = year)) +
+seasonal_orders_plot <- ggplot(detailed_seasonal_orders_quantity, 
+                               aes(x = season, y = total_quantity, 
+                                   color = as.factor(year), group = year)) +
   geom_line() + 
   geom_point() +
-  scale_color_manual(values = c("2020" = "blue", "2021" = "red", "2022" = "green", "2023" = "purple"),
+  scale_color_manual(values = c("2020" = "blue", "2021" = "red", 
+                                "2022" = "green", "2023" = "purple"),
                      name = "Year") + 
   labs(title = "Total Orders by Season (2020-2023)", 
        x = "Season", 
@@ -598,7 +651,9 @@ seasonal_orders_plot <- ggplot(detailed_seasonal_orders_quantity, aes(x = season
        color = "Year") +
   theme_minimal()
 
-ggsave(plot = seasonal_orders_plot, filename = "images/seasonal_orders_plot.png", width = 10, height = 6, dpi = 300)
+ggsave(plot = seasonal_orders_plot, 
+       filename = "images/seasonal_orders_plot.png", 
+       width = 10, height = 6, dpi = 300)
 print(seasonal_orders_plot)
 ```
 
@@ -609,7 +664,8 @@ The seasonal trend for total orders from 2020 to 2023 shows considerable variabi
 non_cancelled_orders <- orders %>%
   filter(order_status != "cancelled")
 
-# Calculate total quantity sold for each product and find the top 5 best-selling products
+# Calculate total quantity sold for each product 
+# Find the top 5 best-selling products
 top_selling_products <- non_cancelled_orders %>%
   inner_join(order_details, by = "order_id") %>%
   group_by(product_id) %>%
@@ -630,17 +686,27 @@ print(top_selling_products_with_names)
 ```
 
 ```{r}
-best_selling_products_plot <- ggplot(top_selling_products_with_names, aes(x = reorder(product_name, total_quantity_sold), y = total_quantity_sold, fill = product_name)) +
+best_selling_products_plot <- ggplot(top_selling_products_with_names, 
+                                     aes(x = reorder(product_name, 
+                                                     total_quantity_sold), 
+                                         y = total_quantity_sold, 
+                                         fill = product_name)) +
   geom_bar(stat = "identity") +
   coord_flip() + # Flip the axes to make it a horizontal bar chart
-  geom_text(aes(label = scales::comma(total_quantity_sold)), position = position_dodge(width = 0.9), hjust = -0.2, size = 3) +
-  labs(title = "Top 5 Best-Selling Products", x = "Product Name", y = "Total Quantity Sold") +
-  scale_y_continuous(labels = scales::comma) + # Format the Y axis labels with commas
+  geom_text(aes(label = scales::comma(total_quantity_sold)), 
+            position = position_dodge(width = 0.9), 
+            hjust = -0.2, size = 3) +
+  labs(title = "Top 5 Best-Selling Products", x = "Product Name", 
+       y = "Total Quantity Sold") +
+  scale_y_continuous(labels = scales::comma) + 
+  # Format the Y axis labels with commas
   scale_fill_brewer(palette = "Set3") +
   theme_minimal() +
   theme(axis.text.y = element_text(angle = 0), legend.position = "none")
 
-ggsave(plot = best_selling_products_plot, filename = "images/best_selling_products_plot.png", width = 10, height = 6, dpi = 300)
+ggsave(plot = best_selling_products_plot, filename = "images/best_selling_products_plot.png", 
+       width = 10, 
+       height = 6, dpi = 300)
 print(best_selling_products_plot)
 ```
 
@@ -650,7 +716,8 @@ The top 5 selling products are ranked as follows: 'Whole Grain Bread 4zv' at 38 
 # Ensure order_date is Date type and calculate season
 orders <- orders %>%
   mutate(
-    order_date = as.Date(order_date, format = "%Y-%m-%d"), # Convert order_date to Date type
+    order_date = as.Date(order_date, format = "%Y-%m-%d"), 
+    # Convert order_date to Date type
     season = case_when(
       month(order_date) %in% c(12, 1, 2) ~ "Winter",
       month(order_date) %in% c(3, 4, 5) ~ "Spring",
@@ -663,17 +730,20 @@ orders <- orders %>%
 non_cancelled_orders <- orders %>%
   filter(order_status != "cancelled")
 
-# Join non_cancelled_orders with order_details and then with products to get product names
+# Join non_cancelled_orders with order_details
+# Join non_cancelled_orders with products to get product names
 sales_data <- non_cancelled_orders %>%
   inner_join(order_details, by = "order_id") %>%
   inner_join(products, by = "product_id")
 
-# Group by season and product_name to summarize total quantity sold across all years
+# Group by season and product_name 
+# To summarize total quantity sold across all years
 seasonal_sales <- sales_data %>%
   group_by(season, product_name) %>%
-  summarise(total_quantity_sold = sum(order_quantity, na.rm = TRUE), .groups = "drop")
+  summarise(total_quantity_sold = sum(order_quantity, na.rm = TRUE), 
+            .groups = "drop")
 
-# For each season, find the top 10 products with the highest total quantity sold
+# For each season find top 10 products with the highest total quantity sold
 top_5_seasonal_sales <- seasonal_sales %>%
   arrange(season, desc(total_quantity_sold)) %>%
   group_by(season) %>%
@@ -725,7 +795,8 @@ sales_data <- non_cancelled_orders %>%
 sales_data_with_categories <- sales_data %>%
   inner_join(product_categories, by = "category_id")
 
-# Aggregate total sales per category, considering the quantity sold and the product price
+# Aggregate total sales per category
+# Considering the quantity sold and the product price
 category_sales_totals <- sales_data_with_categories %>%
   group_by(category_name) %>%
   summarise(total_sales = sum(order_quantity, na.rm = TRUE)) %>%
@@ -741,9 +812,14 @@ print(best_selling_category)
 
 
 # Plot the bar chart
-best_selling_categories_plot <- ggplot(best_selling_category, aes(x = total_sales, y = reorder(category_name, total_sales), fill = category_name)) +
+best_selling_categories_plot <- ggplot(best_selling_category, 
+                                       aes(x = total_sales, 
+                                           y = reorder(category_name, 
+                                                       total_sales), 
+                                           fill = category_name)) +
   geom_bar(stat = "identity") +
-  geom_text(aes(label = total_sales, y = reorder(category_name, total_sales)), 
+  geom_text(aes(label = total_sales, y = reorder(category_name, 
+                                                 total_sales)), 
             position = position_dodge(width = 0.9), 
             hjust = -0.1, 
             size = 3.5, 
@@ -754,7 +830,9 @@ best_selling_categories_plot <- ggplot(best_selling_category, aes(x = total_sale
   theme_minimal() +
   theme(legend.position = "none")
 
-ggsave(plot = best_selling_categories_plot, filename = "images/best_selling_categories_plot.png", width = 10, height = 6, dpi = 300)
+ggsave(plot = best_selling_categories_plot, 
+       filename = "images/best_selling_categories_plot.png", 
+       width = 10, height = 6, dpi = 300)
 print(best_selling_categories_plot)
 ```
 
@@ -777,7 +855,9 @@ orders <- orders %>%
 non_cancelled_orders <- orders %>%
   filter(order_status != "cancelled")
 
-#Join the order details with non_cancelled_orders and products to get category_id for each product sold
+# Join the order details with non_cancelled_orders
+# Join the order details with products 
+# To get category_id for each product sold
 sales_data <- order_details %>%
   inner_join(non_cancelled_orders, by = "order_id") %>%
   inner_join(products, by = "product_id")
@@ -825,7 +905,8 @@ supplier_sales <- order_details %>%
   summarise(total_sales = sum(order_quantity, na.rm = TRUE)) %>%
   ungroup()
 
-# Convert supplier_id to character in both supplier_sales and suppliers before joining
+# Convert supplier_id to character in both supplier_sales and 
+# suppliers before joining
 supplier_sales <- supplier_sales %>%
   mutate(supplier_id = as.character(supplier_id))
 
@@ -853,7 +934,8 @@ The top supplier sales per year show 'Martin-Barnett' leading in 2020 with 15 sa
 # Ensure order_date is Date type and define seasons
 orders <- orders %>%
   mutate(
-    order_date = as.Date(order_date, format = "%d/%m/%Y"), # Adjust format as necessary
+    order_date = as.Date(order_date, format = "%d/%m/%Y"), 
+    # Adjust format as necessary
     season = case_when(
       month(order_date) %in% c(12, 1, 2) ~ "Winter",
       month(order_date) %in% c(3, 4, 5) ~ "Spring",
@@ -872,7 +954,8 @@ seasonal_supplier_sales <- order_details %>%
   inner_join(non_cancelled_orders, by = "order_id") %>%
   inner_join(products, by = "product_id") %>%
   group_by(season, supplier_id) %>%
-  summarise(total_sales = sum(product_quantity, na.rm = TRUE), .groups = "drop") %>%
+  summarise(total_sales = sum(product_quantity, na.rm = TRUE), 
+            .groups = "drop") %>%
   ungroup()
 
 # Join with the suppliers dataframe to get the supplier names
