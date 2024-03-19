@@ -133,6 +133,8 @@ for (variable in data_files) {
 
 
 
+<<<<<<< HEAD
+=======
 #Check phone number is in format of +44 7XXX-XXX-XXX
 # "customers' dataset contains the phone numbers
 customer_data_path <- "data_uploads/customers.csv"
@@ -156,6 +158,7 @@ if (all(phone_format_correct)) {
 }
 
 
+>>>>>>> 03ab08e84603798bd9d25e29c39111061f097604
 
 #Date1
 #check date is in DD/MM/YYYY format, this code don't run really fine

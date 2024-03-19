@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 ---
 title: "Data Management Group Assignment"
 author: "DM Group 5"
@@ -197,27 +195,27 @@ editor: visual
 
 : Entity Attribute Data Dictionary
 
-+---------------+------------------------+-------------------------------------+
-| Relationship  | Attribute              | Description                         |
-+:==============+:=======================+:====================================+
-| Order         | order_id               | Primary Key                         |
-|               |                        |                                     |
-|               |                        | Identifier for each unqiue Order    |
-+---------------+------------------------+-------------------------------------+
-|               | customer_id            | Foreign Key                         |
-|               |                        |                                     |
-|               |                        | Identifier for customers since\     |
-|               |                        | multiple orders can come\           |
-|               |                        | from multiple orders.               |
-+---------------+------------------------+-------------------------------------+
-|               | order_date             | Date of order placement             |
-+---------------+------------------------+-------------------------------------+
-|               | estimate_delivery_date | Delivery date of the order          |
-+---------------+------------------------+-------------------------------------+
-|               | order_status           | Classification of the order\        |
-|               |                        | depending on its current status\    |
-|               |                        | i.e., shipped, cancelled or pending |
-+---------------+------------------------+-------------------------------------+
++--------------+------------------------+-------------------------------------+
+| Relationship | Attribute              | Description                         |
++:=============+:=======================+:====================================+
+| Order        | order_id               | Primary Key                         |
+|              |                        |                                     |
+|              |                        | Identifier for each unqiue Order    |
++--------------+------------------------+-------------------------------------+
+|              | customer_id            | Foreign Key                         |
+|              |                        |                                     |
+|              |                        | Identifier for customers since\     |
+|              |                        | multiple orders can come\           |
+|              |                        | from multiple orders.               |
++--------------+------------------------+-------------------------------------+
+|              | order_date             | Date of order placement             |
++--------------+------------------------+-------------------------------------+
+|              | estimate_delivery_date | Delivery date of the order          |
++--------------+------------------------+-------------------------------------+
+|              | order_status           | Classification of the order\        |
+|              |                        | depending on its current status\    |
+|              |                        | i.e., shipped, cancelled or pending |
++--------------+------------------------+-------------------------------------+
 
 : Relationship Attribute Data Dictionary
 
@@ -319,7 +317,7 @@ for (file in data_files) {
 RSQLite::dbDisconnect(db_connection)
 ```
 
-Populate SQL database: \
+Populate SQL database:\
 While constructing the schema for our SQL database, we focused on defining the data types and structures that would best represent the nature of each field. Data types such as VARCHAR were chosen to impose limits on the length of text-based fields. Meanwhile, for numerical fields, INT and DECIMAL types were used to accurately capture integer and floating-point numbers, respectively. By carefully aligning data types with the intended data structure, we create a framework that ensures data is stored in an organised manner.
 
 Customers Data Validation Code:
@@ -475,4 +473,3 @@ ETL (Extract, transform, load)
 #### 3.2 Github Actions for Continuous Integration
 
 4.  Data Analysis
->>>>>>> 3d9d95cee00998568d48e38f06b32890d8c6802a
