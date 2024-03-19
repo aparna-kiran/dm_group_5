@@ -1,4 +1,5 @@
 library(RSQLite)
+
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -9,6 +10,16 @@ library(scales)
 db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"ecommerce.db")
 
 # Reading required database
+<<<<<<< HEAD
+customers <- read_csv("data_uploads/customers.csv")
+order_details <- read_csv("data_uploads/order_details.csv")
+orders <- read_csv("data_uploads/orders.csv")
+product_categories <- read_csv("data_uploads/product_categories.csv")
+products <- read_csv("data_uploads/products.csv")
+promotion <- read_csv("data_uploads/promotion.csv")
+suppliers <- read_csv("data_uploads/supplier.csv")
+transactions <- read_csv("data_uploads/transactions.csv")
+=======
 customers <- dbReadTable(db_connection, "customers")
 order_details <- dbReadTable(db_connection, "order_details")
 orders <- dbReadTable(db_connection, "orders")
@@ -17,6 +28,7 @@ products <- dbReadTable(db_connection, "products")
 promotions <- dbReadTable(db_connection, "promotions")
 suppliers <- dbReadTable(db_connection, "suppliers")
 transactions <- dbReadTable(db_connection, "transactions")
+>>>>>>> acac081698786096999497e8ec1d6806d362c3e4
 
 #Standardise date format
 orders$order_date <- as.Date(orders$order_date, format= "%d/%m/%Y")
