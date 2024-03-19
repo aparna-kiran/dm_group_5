@@ -129,41 +129,24 @@ RSQLite::dbWriteTable(db_connection,"orders","data_uploads/orders.csv",append=TR
 #Check if the first column of each file is a primary
 for (variable in data_files) {
   this_filepath <- paste0("data_uploads/", variable)
-  this_file_contents <- readr::read_csv(this_filepath)
+  this_file_contents <- readr::read_csv(this_filepath, col_types = cols())
   number_of_rows <- nrow(this_file_contents)
   print(paste0("Checking for: ", variable))
   print(paste0(" is ", nrow(unique(this_file_contents[, 1]))==number_of_rows))
-}
-
-
-#Check duplicates of the first column
-for (variable in data_files) {
-  this_filepath <- paste0("data_uploads/", variable)
-  this_file_contents <- readr::read_csv(this_filepath)
+  
+  #Check duplicates of the first column
   duplicates <- duplicated(this_file_contents[[1]])
   number_of_duplicates <- sum(duplicates)
   print(paste0("Checking for duplicates in '", variable, "': ", number_of_duplicates, " duplicates found"))
-}
-
-
-#Check missing values
-for (file_path in data_files) {
-  this_filepath <- paste0("data_uploads/", file_path)
-  # Read the CSV file
-  data <- readr::read_csv(this_filepath)
   
-  # Read the data from the file
-  
-  print(data)
   # Calculate the number of missing values for each column
-  missing_values <- colSums(is.na(data))
+  missing_values <- colSums(is.na(this_file_contents))
   
   # Print the results for the current file
-  print(paste("Missing values in", basename(file_path), ":"))
+  print(paste("Missing values in", basename(this_filepath), ":"))
   print(missing_values)
   print("")
 }
-
 
 #Check email is in format of xxx@xxx.com
 # "customers' dataset contains the phone numbers

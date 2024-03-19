@@ -30,6 +30,7 @@ for (file in data_files) {
 }
 
 
+
 # Check if the first column of each file is a primary
 for (variable in data_files) {
   this_filepath <- paste0("data_uploads/", variable)
@@ -39,6 +40,7 @@ for (variable in data_files) {
   print(paste0(" is ", nrow(unique(this_file_contents[, 1]))==number_of_rows))
 }
 # transaction result is False, which it should be True to check primary key
+
 
 
 #Check duplicates
@@ -60,19 +62,27 @@ for (variable in data_files) {
 # Check missing values
 # Loop over the files and print the number of missing values for each one
 for (file_path in data_files) {
+  this_filepath <- paste0("data_uploads/", file_path)
+  # Read the CSV file
+  data <- readr::read_csv(this_filepath)
+  
+  # Read the data from the file
+  
+  print(data)
   # Calculate the number of missing values for each column
-  missing_values <- sapply(data_files, function(x) sum(is.na(x)))
+  missing_values <- colSums(is.na(data))
+  
   # Print the results for the current file
-  cat("Missing values in", basename(file_path), ":\n")
+  print(paste("Missing values in", basename(file_path), ":"))
   print(missing_values)
-  cat("\n") 
+  print("")
 }
 # It has problems as its printing the entire set of results for all files every time it is called
 
 
 
 
-#Check email format, both of the codes have some erros
+#Check email format, both of the codes have some errors
 #First code
 for (variable in data_files) {
   this_filepath <- paste0("data_uploads/", variable)
@@ -123,10 +133,35 @@ for (variable in data_files) {
 
 
 
+<<<<<<< HEAD
+=======
+#Check phone number is in format of +44 7XXX-XXX-XXX
+# "customers' dataset contains the phone numbers
+customer_data_path <- "data_uploads/customers.csv"
+customer_data <- read_csv(customer_data_path)
+
+# Define the phone number format
+phone_pattern <- "^\\+44 7\\d{3}-\\d{3}-\\d{3}$"
+
+# Check if the phone format is correct in the specified column
+# Replace 'phone_column_name' with the actual name of the column containing phone numbers
+phone_format_correct <- grepl(phone_pattern, customer_data$phone)
+
+# Printing the results
+cat("Checking phone format for customers dataset:\n")
+if (all(phone_format_correct)) {
+  cat("All phone numbers are in the correct format.\n")
+} else {
+  incorrect_phones <- customer_data$phone_column_name[!phone_format_correct]
+  cat("The following phone numbers are not in the correct format:\n")
+  print(incorrect_phones)
+}
 
 
+>>>>>>> 03ab08e84603798bd9d25e29c39111061f097604
+
+#Date1
 #check date is in DD/MM/YYYY format, this code don't run really fine
-# Assuming data_files is a vector of CSV filenames
 for (variable in data_files) {
   this_filepath <- paste0("data_uploads/", variable)
   this_file_contents <- read_csv(this_filepath)
@@ -150,6 +185,32 @@ for (variable in data_files) {
 }
 
 
+#Date2
+for (variable in data_files) {
+  this_filepath <- paste0("data_uploads/", variable)
+  this_file_contents <- read_csv(this_filepath)
+  
+  # Check for columns containing the word 'date'
+  date_columns <- grep("\\bdate\\b", names(this_file_contents), value = TRUE)
+  
+  if (length(date_columns) > 0) {
+    # Define a regex pattern for the date format
+    date_pattern <- "^([0-2][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$"
+    
+    for (date_column in date_columns) {
+      # Check if the date format is correct in the date column
+      date_format_correct <- grepl(date_pattern, this_file_contents[[date_column]])
+      
+      # Print out the results
+      cat("Checking date format for '", variable, "' in '", date_column, "' column:\n")
+      if (all(date_format_correct)) {
+        cat("All dates are in the correct format (DD/MM/YYYY).\n")
+      } else {
+        cat("Some dates are not in the correct format (DD/MM/YYYY).\n")
+      }
+    }
+  }
+}
 
 
 
