@@ -195,13 +195,12 @@ editor: visual
 
 : Entity Attribute Data Dictionary
 
-<<<<<<< HEAD
 +---------------+------------------------+-------------------------------------+
 | Relationship  | Attribute              | Description                         |
 +:==============+:=======================+:====================================+
 | Order         | order_id               | Primary Key                         |
 |               |                        |                                     |
-|               |                        | Identifier for each unqiue Order    |
+|               |                        | Identifier for each unique Order    |
 +---------------+------------------------+-------------------------------------+
 |               | customer_id            | Foreign Key                         |
 |               |                        |                                     |
@@ -217,29 +216,6 @@ editor: visual
 |               |                        | depending on its current status\    |
 |               |                        | i.e., shipped, cancelled or pending |
 +---------------+------------------------+-------------------------------------+
-=======
-+--------------+------------------------+-------------------------------------+
-| Relationship | Attribute              | Description                         |
-+:=============+:=======================+:====================================+
-| Order        | order_id               | Primary Key                         |
-|              |                        |                                     |
-|              |                        | Identifier for each unique Order    |
-+--------------+------------------------+-------------------------------------+
-|              | customer_id            | Foreign Key                         |
-|              |                        |                                     |
-|              |                        | Identifier for customers since\     |
-|              |                        | multiple orders can come\           |
-|              |                        | from multiple orders.               |
-+--------------+------------------------+-------------------------------------+
-|              | order_date             | Date of order placement             |
-+--------------+------------------------+-------------------------------------+
-|              | estimate_delivery_date | Delivery date of the order          |
-+--------------+------------------------+-------------------------------------+
-|              | order_status           | Classification of the order\        |
-|              |                        | depending on its current status\    |
-|              |                        | i.e., shipped, cancelled or pending |
-+--------------+------------------------+-------------------------------------+
->>>>>>> 6eaaadec5a613392b7972d187dd98ade8344a16f
 
 : Relationship Attribute Data Dictionary
 
@@ -532,7 +508,8 @@ library(scales)
 ## Data Analysis
 
 #### 4.1, 4.2 Advanced Data Analysis in R and Reporting with Quarto
-In our ecommerce platform, we extract key characteristics such as total orders, total revenue, best-selling products, and least-selling products, along with identifying top-selling suppliers. We analyze these results across different time series, including seasonally and quarterly, to uncover patterns and trends. Additionally, we examine total revenue by region and assess transaction methods used by various customers. This comprehensive analysis allows us to generate more valuable insights, enhancing our understanding of market dynamics and customer preferences.
+
+In our e-commerce platform, we extract key characteristics such as total orders, total revenue, best-selling products, and least-selling products, along with identifying top-selling suppliers. We analyze these results across different time series, including seasonally and quarterly, to uncover patterns and trends. Additionally, we examine total revenue by region and assess transaction methods used by various customers. This comprehensive analysis allows us to generate more valuable insights, enhancing our understanding of market dynamics and customer preferences.
 
 ```{r}
 # Reading required database
@@ -795,7 +772,7 @@ ggsave(plot = best_selling_products_plot, filename = "images/best_selling_produc
 print(best_selling_products_plot)
 ```
 
-The top 5 selling products are ranked as follow: "Whole Grain Bread 4zv" at 38 units, followed by "Yoga Mat WZQ" at 36, "The Great Adventure EIO" at 35, "Yoga Mat 6ne" at 33, and both "Organic Honey H4w" and "Eau de Toilette MZw" at 32 units each, showcasing a varied consumer interest across food, fitness, and personal care items.
+The top 5 selling products are ranked as follows: 'Whole Grain Bread 4zv' at 38 units, followed by 'Yoga Mat WZQ' at 36, 'The Great Adventure EIO' at 35, 'Yoga Mat 6ne' at 33, and both 'Organic Honey H4w' and 'Eau de Toilette MZw' at 32 units each, showcasing a varied consumer interest across food, fitness, and personal care items.
 
 ```{r}
 # Ensure order_date is Date type and calculate season
@@ -833,7 +810,7 @@ top_5_seasonal_sales <- seasonal_sales %>%
 print(top_5_seasonal_sales)
 ```
 
-Throughout 2020 to 2023, Whole Grain Bread 4zv" is a consistent favorite, leading in fall with 16 units and remaining strong in summer with 13. "Organic Honey" is a fall staple, with two varieties selling 13 and 11 units respectively, while "Camping Tent gTa" tops spring sales at 17 units, aligning with outdoor activity in warmer weather. Tech products peak in summer and winter, with "Smartphone X12 Jmx" selling 15 units in summer and "Eau de Toilette MZw" becoming the winter favorite at 14 units. These patterns suggest a blend of steady demand for consumables and seasonal shifts towards outdoor gear and personal electronics.
+Throughout 2020 to 2023, 'Whole Grain Bread 4zv' is a consistent favorite, leading in fall with 16 units and remaining strong in summer with 13. 'Organic Honey' is a fall staple, with two varieties selling 13 and 11 units respectively, while 'Camping Tent gTa' tops spring sales at 17 units, aligning with outdoor activity in warmer weather. Tech products peak in summer and winter, with 'Smartphone X12 Jmx' selling 15 units in summer and 'Eau de Toilette MZw' becoming the winter favorite at 14 units. These patterns suggest a blend of steady demand for consumables and seasonal shifts towards outdoor gear and personal electronics.
 
 ```{r}
 # Filter out cancelled orders
@@ -860,7 +837,7 @@ print(least_selling_products)
 
 ```
 
-In our e-commerce platform, the products 'The Great Adventure Lfr,' 'Smartphone X12 qbk,' 'The Great Adventure zve' 'Premium Blender OaQ,' and 'Camping Tent UeT' have the lowest sales, with only one unit sold for each.
+In our e-commerce platform, the products 'The Great Adventure Lfr', 'Smartphone X12 qbk', 'The Great Adventure zve', 'Premium Blender OaQ' and 'Camping Tent UeT' have the lowest sales, with only one unit sold for each.
 
 ```{r}
 # Filter out cancelled orders 
@@ -956,7 +933,7 @@ best_selling_categories_per_season <- best_selling_categories_per_season %>%
 print(best_selling_categories_per_season)
 ```
 
-In the fall, Groceries lead the best-selling product category with 120 units, followed by Fashion at 103, and Sports & Outdoors at 83 units. Beauty & Personal Care and Home & Kitchen also perform well with 80 and 74 units respectively. In the spring, Groceries again top the list with 113 units, while Sports & Outdoors rise to a close second with 103 units, overtaking Fashion which is at 99 units. Toys & Games and Books show strong sales in spring, at 91 and 90 units, indicating a surge in leisure and educational activities. This pattern suggests that essentials like groceries have a steady demand, while other categories like Sports & Outdoors and Books gain seasonal traction.
+In the fall, Groceries lead the best-selling product category with 120 units, followed by Fashion at 103, and Sports & Outdoors at 83 units. Beauty & Personal Care and Home & Kitchen also perform well with 80 and 74 units respectively. In the spring, Groceries again topped the list with 113 units, while Sports & Outdoors rose to a close second with 103 units, overtaking Fashion which was at 99 units. Toys & Games and Books show strong sales in spring, at 91 and 90 units, indicating a surge in leisure and educational activities. This pattern suggests that essentials like groceries have a steady demand, while other categories like Sports & Outdoors and Books gain seasonal traction.
 
 ```{r}
 # Ensure order_date is Date type
@@ -994,7 +971,7 @@ best_selling_suppliers_per_year <- supplier_sales %>%
 print(best_selling_suppliers_per_year)
 ```
 
-The top supplier sales per year show 'Martin-Barnett' leading in 2020 with 15 sales, a dip to 11 sales with 'Archer LLC' in 2021, a Harvey-Hines at 17 sales among suppliers in 2022, and a return to 15 sales with 'Perkins Mathews and Ray' in 2023.
+The top supplier sales per year show 'Martin-Barnett' leading in 2020 with 15 sales, a dip to 11 sales with 'Archer LLC' in 2021, 'Harvey-Hines' at 17 sales among suppliers in 2022, and a return to 15 sales with 'Perkins Mathews and Ray' in 2023.
 
 ```{r}
 # Ensure order_date is Date type and define seasons
@@ -1037,7 +1014,7 @@ best_selling_suppliers_per_season <- seasonal_supplier_sales %>%
 print(best_selling_suppliers_per_season)
 ```
 
-Across the seasons from 2020 to 2023, 'Dyer Pena and Johnson' was the top supplier in both fall with 390 sales, while 'Casey Group' led in the spring with the highest sales at 388, and 'Moon Gillespie and Vargas' was the top in summer with 402 sales, lastly in the winter 'Glover-Russell'lead with the total sales of 279.
+Across the seasons from 2020 to 2023, 'Dyer Pena and Johnson' was the top supplier in both fall with 390 sales, while 'Casey Group' led in the spring with the highest sales at 388, and 'Moon Gillespie and Vargas' was the top in summer with 402 sales, lastly in the winter 'Glover-Russell' led with the total sales of 279.
 
 ## Conclusion and Future Improvements:
 
