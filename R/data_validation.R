@@ -1,122 +1,24 @@
-
-# All the codes are basically working, but some of them have some small issues
-
 library(readr)
 
 # Get a list of file names in the directory
-data_files <- list.files("data_uploads/")
+directory <- "data_uploads/"
+
+data_files <- list.files(directory, pattern = "\\.csv$")
 data_files
 
-#simplify the tables by removing the suffix "-Table 1.csv"
-#suffix <- "-Table 1.csv"
-#data_files <- gsub("-Table 1.csv","", data_files)
-#data_files
-#no need for this, its creating errors
+db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"try_ecommerce.db")
 
+table_names <- dbListTables(db_connection)
+table_names
 
-# To import each csv file into the database table
-for (file in data_files) {
-  this_filepath <- paste0("data_uploads/", file)
-  this_file_contents <- readr::read_csv(this_filepath)
-  number_of_rows <- nrow(this_file_contents)
-  number_of_columns <- ncol(this_file_contents)
-  #To print the number of columns and rows of each dataset
-  print(paste0("The file: ",file,
-               " has: ",
-               format(number_of_rows,big.mark = ","),
-               " rows and ",
-               number_of_columns," columns"))
-  table_name <- gsub(".csv","",file)
-}
-
-
-
-# Check if the first column of each file is a primary
-for (variable in data_files) {
-  this_filepath <- paste0("data_uploads/", variable)
-  this_file_contents <- readr::read_csv(this_filepath)
-  number_of_rows <- nrow(this_file_contents)
-  print(paste0("Checking for: ", variable))
-  print(paste0(" is ", nrow(unique(this_file_contents[, 1]))==number_of_rows))
-}
-# transaction result is False, which it should be True to check primary key
-
-
-
-#Check duplicates
-for (variable in data_files) {
-  # Construct the file path
-  this_filepath <- paste0("data_uploads/", variable)
-  # Read the CSV file
-  this_file_contents <- readr::read_csv(this_filepath)
-  # Check for duplicate rows for just the first column
-  duplicates <- duplicated(this_file_contents[[1]])
-  # Count the number of duplicates
-  number_of_duplicates <- sum(duplicates)
-  # Print the result
-  print(paste0("Checking for duplicates in '", variable, "': ", number_of_duplicates, " duplicates found"))
-}
-#This code is working, but for transaction, its still showing duplicates even I only did for the first column
-
-
-# Check missing values
-# Loop over the files and print the number of missing values for each one
-for (file_path in data_files) {
-  this_filepath <- paste0("data_uploads/", file_path)
-  # Read the CSV file
-  data <- readr::read_csv(this_filepath)
+for (tablename in table_names){
+  print(tablename)
   
-  # Read the data from the file
-  
-  print(data)
-  # Calculate the number of missing values for each column
-  missing_values <- colSums(is.na(data))
-  
-  # Print the results for the current file
-  print(paste("Missing values in", basename(file_path), ":"))
-  print(missing_values)
-  print("")
-}
-# It has problems as its printing the entire set of results for all files every time it is called
-
-
-
-
-#Check email format, both of the codes have some errors
-#First code
-for (variable in data_files) {
-  this_filepath <- paste0("data_uploads/", variable)
-  this_file_contents <- readr::read_csv(this_filepath)
-  # Define a regex pattern for the email format
-  email_pattern <- "^[a-zA-Z]+\\.[a-zA-Z]+@email\\.com$"
-  # Check if the email format is correct in the first column
-  email_format_correct <- grepl(email_pattern, this_file_contents[[1]], perl = TRUE)
-  # Print out the results
-  print(paste0("Checking email format for: '", variable, "'"))
-  if (all(email_format_correct)) {
-    print("All emails are in the correct format.")
-  } else {
-    print("Some emails are not in the correct format.")
-  }
-}
-
-#Second Codes
-for (variable in data_files) {
-    this_filepath <- paste0("data_uploads/", variable)
-    this_file_contents <- readr::read_csv(this_filepath)  
-  # Determine which dataset we are checking and set the appropriate pattern
-  if (grepl("customers", variable)) {
-    # Customer email pattern
-    email_column <- "email" 
-    email_pattern <- "^[a-zA-Z]+\\.[a-zA-Z]+@email\\.com$"
-  } else if (grepl("suppliers", file_path)) {
-    # Supplier email pattern
-    email_column <- "supplier_email"  
-    email_pattern <- "^.+@(email\\.com|email\\.net)$"
-  } else {
-    next  # Skip the file if it's neither customer nor supplier
-  }
-  
+<<<<<<< HEAD
+  # Filter files containing "customers" in their names
+  table_files <- grep(tablename, data_files, ignore.case = TRUE, value = TRUE)
+  print(table_files)
+=======
   # Check if the email format is correct in the respective column
   email_format_correct <- grepl(email_pattern, this_file_contents[[email_column]], perl = TRUE)
   
@@ -165,52 +67,160 @@ if (all(phone_format_correct)) {
 for (variable in data_files) {
   this_filepath <- paste0("data_uploads/", variable)
   this_file_contents <- read_csv(this_filepath)
+>>>>>>> ef06af1a12a4f5353f1c80b882c6ce5ab56d80f0
   
-  # Check for the presence of a column named 'date'
-  if ('date' %in% names(this_file_contents)) {
-    # Define a regex pattern for the date format
-    date_pattern <- "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}$"
-    
-    # Check if the date format is correct in the date column
-    date_format_correct <- grepl(date_pattern, this_file_contents[["date"]], perl = TRUE)
-    
-    # Print out the results
-    print(paste0("Checking date format for '", variable, "' in 'date' column:"))
-    if (all(date_format_correct)) {
-      print("All dates are in the correct format.")
-    } else {
-      print("Some dates are not in the correct format.")
-    }
-  }
-}
-
-
-#Date2
-for (variable in data_files) {
-  this_filepath <- paste0("data_uploads/", variable)
-  this_file_contents <- read_csv(this_filepath)
-  
-  # Check for columns containing the word 'date'
-  date_columns <- grep("\\bdate\\b", names(this_file_contents), value = TRUE)
-  
-  if (length(date_columns) > 0) {
-    # Define a regex pattern for the date format
-    date_pattern <- "^([0-2][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$"
-    
-    for (date_column in date_columns) {
-      # Check if the date format is correct in the date column
-      date_format_correct <- grepl(date_pattern, this_file_contents[[date_column]])
+  if(tablename == "customers"){
+    dbExecute(db_connection, "DROP TABLE IF EXISTS customers")
+    customers <- "
+      CREATE TABLE IF NOT EXISTS 'customers' (
+        'customer_id' INT PRIMARY KEY, 
+        'first_name' VARCHAR(50) NOT NULL, 
+        'last_name' VARCHAR(50) NOT NULL,
+        'email' VARCHAR(100) NOT NULL, 
+        'password' VARCHAR(100) NOT NULL, 
+        'phone_number' VARCHAR(20) NOT NULL, 
+      );
+      "
+    for (filename in table_files){
+      filepath <- paste(directory, filename)
       
-      # Print out the results
-      cat("Checking date format for '", variable, "' in '", date_column, "' column:\n")
-      if (all(date_format_correct)) {
-        cat("All dates are in the correct format (DD/MM/YYYY).\n")
-      } else {
-        cat("Some dates are not in the correct format (DD/MM/YYYY).\n")
-      }
+      RSQLite::dbWriteTable(db_connection,tablename,"data_uploads/customers.csv",append=TRUE)
+      
+    }
+    
+  }
+  
+  if (length(table_files) > 1){
+    for (filename in table_files){
+      basename <- basename(filename)
+
+      # extracting the filenames with the same table name
+      table_filename <- grep(tablename, filename, ignore.case = TRUE, value = TRUE)
+      
+      print(table_filename)
     }
   }
+
 }
 
+
+dbExecute(db_connection, "DROP TABLE IF EXISTS customers")
+customers <- "
+CREATE TABLE IF NOT EXISTS 'customers' (
+  'customer_id' INT PRIMARY KEY, 
+  'first_name' VARCHAR(50) NOT NULL, 
+  'last_name' VARCHAR(50) NOT NULL,
+  'email' VARCHAR(100) NOT NULL, 
+  'password' VARCHAR(100) NOT NULL, 
+  'phone_number' VARCHAR(20) NOT NULL, 
+);
+"
+
+dbExecute(db_connection, "DROP TABLE IF EXISTS order_details")
+order_details <- "
+CREATE TABLE IF NOT EXISTS 'order_details' (
+  'order_detail_id' INT PRIMARY KEY,
+  'order_id' INT NOT NULL,
+  'product_id' INT NOT NULL, 
+  'order_quantity' INT, 
+  'product_price' DECIMAL(10, 2) NOT NULL,
+  'shipping_address' VARCHAR(250) NOT NULL,
+  'city' VARCHAR(50) NOT NULL,
+  'postcode' VARCHAR(10) NOT NULL,
+  FOREIGN KEY ('product_id')
+  REFERENCES products ('product_id'),
+  FOREIGN KEY ('order_id')
+  REFERENCES orders ('order_id')
+);
+"
+
+dbExecute(db_connection, "DROP TABLE IF EXISTS transactions")
+transactions <- "
+CREATE TABLE IF NOT EXISTS 'transactions' (
+  'transaction_id' INT PRIMARY KEY,
+  'customer_id' INT NOT NULL,
+  'order_id' INT NOT NULL,
+  'receipt_invoice' VARCHAR(20) NOT NULL,
+  'transaction_method' TEXT NOT NULL,
+  'transaction_date' DATE NOT NULL,
+  FOREIGN KEY ('customer_id') 
+  REFERENCES customers('customer_id'),
+  FOREIGN KEY ('order_id') 
+  REFERENCES orders('order_id')
+);
+"
+
+dbExecute(db_connection, "DROP TABLE IF EXISTS products")
+products <- "
+CREATE TABLE IF NOT EXISTS 'products' (
+  'product_id' INT PRIMARY KEY,
+  'category_id' INT NOT NULL,
+  'supplier_id' INT NOT NULL,
+  'product_name' VARCHAR(100) NOT NULL,
+  'product_sku' VARCHAR(20),
+  'product_description' VARCHAR(500),
+  'price' DECIMAL(1000,2) NOT NULL,
+  'product_quantity' INT,
+  FOREIGN KEY ('category_id')
+  REFERENCES product_categories ('category_id'),
+  FOREIGN KEY ('supplier_id')
+  REFERENCES suppliers ('supplier_id')
+);
+"
+
+dbExecute(db_connection, "DROP TABLE IF EXISTS product_categories")
+product_categories <- "
+CREATE TABLE IF NOT EXISTS 'product_categories' (
+  'category_id' INT PRIMARY KEY,
+  'category_name' VARCHAR(50) NOT NULL,
+);
+"
+
+dbExecute(db_connection, "DROP TABLE IF EXISTS suppliers")
+suppliers <- "
+CREATE TABLE IF NOT EXISTS 'suppliers' (
+  'supplier_id' INT PRIMARY KEY,
+  'supplier_name' VARCHAR(100) NOT NULL,
+  'supplier_email' VARCHAR(100) NOT NULL
+);
+"
+
+dbExecute(db_connection, "DROP TABLE IF EXISTS promotion")
+promotion <- "
+CREATE TABLE IF NOT EXISTS 'promotion'(
+  'promotion_id' INT PRIMARY KEY,
+  'discount_start_date' DATE NOT NULL,
+  'discount_end_date' DATE NOT NULL,
+  'discount_code' VARCHAR(20),
+  'discount_rate' VARCHAR(3)
+);
+"
+
+dbExecute(db_connection, "DROP TABLE IF EXISTS orders")
+orders <- "
+CREATE TABLE IF NOT EXISTS 'orders'(
+  'order_id' INT PRIMARY KEY,
+  'customer_id' INT NOT NULL,
+  'estimated_delivery_date' DATE NOT NULL,
+  'order_date' DATE NOT NULL,
+  'order_status' VARCHAR(100) NOT NULL,
+  'total_price' INT NOT NULL,
+  FOREIGN KEY('customer_id')
+  REFERENCES customers('customer_id'),
+  FOREIGN KEY('shipping_address_id')
+  REFERENCES addresses('address_id')
+);
+"
+
+#Writing the csv file contents to the database and
+#creating the table with the table_name
+RSQLite::dbWriteTable(db_connection,"customers","data_uploads/customers.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"order_details","data_uploads/order_details.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"transactions","data_uploads/transactions.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"products","data_uploads/products.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"product_categories","data_uploads/product_categories.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"suppliers","data_uploads/supplier.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"promotion","data_uploads/promotion.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,"orders","data_uploads/orders.csv",append=TRUE)
 
 
