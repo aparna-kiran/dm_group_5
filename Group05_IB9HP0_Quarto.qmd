@@ -195,27 +195,27 @@ editor: visual
 
 : Entity Attribute Data Dictionary
 
-+---------------+------------------------+-------------------------------------+
-| Relationship  | Attribute              | Description                         |
-+:==============+:=======================+:====================================+
-| Order         | order_id               | Primary Key                         |
-|               |                        |                                     |
-|               |                        | Identifier for each unique Order    |
-+---------------+------------------------+-------------------------------------+
-|               | customer_id            | Foreign Key                         |
-|               |                        |                                     |
-|               |                        | Identifier for customers since\     |
-|               |                        | multiple orders can come\           |
-|               |                        | from multiple orders.               |
-+---------------+------------------------+-------------------------------------+
-|               | order_date             | Date of order placement             |
-+---------------+------------------------+-------------------------------------+
-|               | estimate_delivery_date | Delivery date of the order          |
-+---------------+------------------------+-------------------------------------+
-|               | order_status           | Classification of the order\        |
-|               |                        | depending on its current status\    |
-|               |                        | i.e., shipped, cancelled or pending |
-+---------------+------------------------+-------------------------------------+
++--------------+------------------------+-------------------------------------+
+| Relationship | Attribute              | Description                         |
++:=============+:=======================+:====================================+
+| Order        | order_id               | Primary Key                         |
+|              |                        |                                     |
+|              |                        | Identifier for each unique Order    |
++--------------+------------------------+-------------------------------------+
+|              | customer_id            | Foreign Key                         |
+|              |                        |                                     |
+|              |                        | Identifier for customers since\     |
+|              |                        | multiple orders can come\           |
+|              |                        | from multiple orders.               |
++--------------+------------------------+-------------------------------------+
+|              | order_date             | Date of order placement             |
++--------------+------------------------+-------------------------------------+
+|              | estimate_delivery_date | Delivery date of the order          |
++--------------+------------------------+-------------------------------------+
+|              | order_status           | Classification of the order\        |
+|              |                        | depending on its current status\    |
+|              |                        | i.e., shipped, cancelled or pending |
++--------------+------------------------+-------------------------------------+
 
 : Relationship Attribute Data Dictionary
 
