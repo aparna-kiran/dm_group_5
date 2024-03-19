@@ -30,6 +30,9 @@ jobs:
       - name: Execute R script
         run: |
           Rscript R/data_importing.R
+      - name: Execute data automation R script
+        run: |
+          Rscript R/data_validation.R
       - name: Execute data analysis R script
         run: |
           Rscript R/data_transformation.R
