@@ -14,11 +14,157 @@ table_names
 for (tablename in table_names){
   print(tablename)
   
-<<<<<<< HEAD
+  # Filter files containing "customers" in their name
+  table_files <- grep(tablename, data_files, ignore.case = TRUE, value = TRUE)
+  print(table_files)
+  
+  if(length(table_files) > 1){
+    if(tablename == "customers"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+      
+        id_length <- max(nchar(existing_dataset$customer_id))
+        existing_dataset$customer_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$customer_id))
+        
+        filtered_dataset <- dataset[!dataset$customer_id %in% existing_dataset$customer_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, filtered_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Customers are appending")
+        }
+      }
+    }
+    if(tablename == "products"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$product_id))
+        existing_dataset$product_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$product_id))
+        
+        filtered_dataset <- dataset[!dataset$product_id %in% existing_dataset$product_id, ]
+        
+        RSQLite::dbWriteTable(db_connection,tablename, filtered_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Products are appending")
+        }
+      }
+    }
+    if(tablename == "order_details"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$order_detail_id))
+        existing_dataset$order_detail_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$order_detail_id))
+        
+        filtered_dataset <- dataset[!dataset$order_detail_id %in% existing_dataset$order_detail_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, new_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Order Details are appending")
+        }
+      }
+    }
+    if(tablename == "orders"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$order_id))
+        existing_dataset$order_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$order_id))
+        
+        filtered_dataset <- dataset[!dataset$order_id %in% existing_dataset$order_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, new_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Orders are appending")
+        }
+      }
+    }
+    if(tablename == "promotions"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$promotion_id))
+        existing_dataset$promotion_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$promotion_id))
+        
+        filtered_dataset <- dataset[!dataset$promotion_id %in% existing_dataset$promotion_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, new_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Promotions are appending")
+        }
+      }
+    }
+    if(tablename == "suppliers"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$supplier_id))
+        existing_dataset$supplier_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$supplier_id))
+        
+        filtered_dataset <- dataset[!dataset$supplier_id %in% existing_dataset$supplier_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, new_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Suppliers are appending")
+        }
+      }
+    }
+    if(tablename == "transactions"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$transaction_id))
+        existing_dataset$transaction_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$transaction_id))
+        
+        filtered_dataset <- dataset[!dataset$transaction_id %in% existing_dataset$transaction_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, new_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Transactions are appending")
+        }
+      }
+    }
+    if(tablename == "product_categories"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$category_id))
+        existing_dataset$category_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$category_id))
+        
+        filtered_dataset <- dataset[!dataset$category_id %in% existing_dataset$category_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, new_dataset, append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Product Categories are appending")
+        }
+      }
+    }
+  }
+}
+data_files <- list.files(directory, pattern = "\\.csv$")
+data_files
+
+db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"try_ecommerce.db")
+
+table_names <- dbListTables(db_connection)
+table_names
+
+for (tablename in table_names){
+  print(tablename)
+  
   # Filter files containing "customers" in their names
   table_files <- grep(tablename, data_files, ignore.case = TRUE, value = TRUE)
   print(table_files)
-=======
+
   # Check if the email format is correct in the respective column
   email_format_correct <- grepl(email_pattern, this_file_contents[[email_column]], perl = TRUE)
   
@@ -35,8 +181,6 @@ for (tablename in table_names){
 
 
 
-<<<<<<< HEAD
-=======
 #Check phone number is in format of +44 7XXX-XXX-XXX
 # "customers' dataset contains the phone numbers
 customer_data_path <- "data_uploads/customers.csv"
@@ -59,15 +203,11 @@ if (all(phone_format_correct)) {
   print(incorrect_phones)
 }
 
-
->>>>>>> 03ab08e84603798bd9d25e29c39111061f097604
-
 #Date1
 #check date is in DD/MM/YYYY format, this code don't run really fine
 for (variable in data_files) {
   this_filepath <- paste0("data_uploads/", variable)
   this_file_contents <- read_csv(this_filepath)
->>>>>>> ef06af1a12a4f5353f1c80b882c6ce5ab56d80f0
   
   if(tablename == "customers"){
     dbExecute(db_connection, "DROP TABLE IF EXISTS customers")
