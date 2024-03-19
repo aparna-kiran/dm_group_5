@@ -38,6 +38,7 @@ for (file in data_files) {
   
   #Writing the csv file contents to the database and
   #creating the table with the table_name
+  RSQLite::dbWriteTable(db_connection,table_name,this_file_contents,overwrite=TRUE, append=TRUE)
   
   #To list the database tables
   RSQLite::dbListTables(db_connection)
