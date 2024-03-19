@@ -24,7 +24,7 @@ for (tablename in table_names){
         existing_dataset <- dbReadTable(db_connection, tablename)
         filepath <- paste0(directory,table_files[i])
         dataset <- read_csv(filepath, col_types = cols())
-      
+        
         id_length <- max(nchar(existing_dataset$customer_id))
         existing_dataset$customer_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$customer_id))
         
