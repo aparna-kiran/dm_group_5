@@ -123,29 +123,6 @@ for (variable in data_files) {
 
 
 
-#Check phone number is in format of +44 7XXX-XXX-XXX
-# "customers' dataset contains the phone numbers
-customer_data_path <- "data_uploads/customers-Table 1.csv"
-customer_data <- read_csv(customer_data_path)
-
-# Define the phone number format
-phone_pattern <- "^\\+44 7\\d{3}-\\d{3}-\\d{3}$"
-
-# Check if the phone format is correct in the specified column
-# Replace 'phone_column_name' with the actual name of the column containing phone numbers
-phone_format_correct <- grepl(phone_pattern, customer_data$phone)
-
-# Printing the results
-cat("Checking phone format for customers dataset:\n")
-if (all(phone_format_correct)) {
-  cat("All phone numbers are in the correct format.\n")
-} else {
-  incorrect_phones <- customer_data$phone_column_name[!phone_format_correct]
-  cat("The following phone numbers are not in the correct format:\n")
-  print(incorrect_phones)
-}
-
-
 
 
 #check date is in DD/MM/YYYY format, this code don't run really fine
