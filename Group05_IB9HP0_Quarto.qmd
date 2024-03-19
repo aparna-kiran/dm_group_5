@@ -56,7 +56,7 @@ editor: visual
 +:=======================+:====================+:========================================+
 | 1.  Suppliers          | supplier_ID         | Primary Key                             |
 |                        |                     |                                         |
-|                        |                     | Identifier for each unqiue supplier     |
+|                        |                     | Identifier for each unique supplier     |
 +------------------------+---------------------+-----------------------------------------+
 |                        | supplier_name       | Name of the supplier                    |
 +------------------------+---------------------+-----------------------------------------+
@@ -66,7 +66,7 @@ editor: visual
 +------------------------+---------------------+-----------------------------------------+
 | 2.  Products           | product_id          | Primary Key                             |
 |                        |                     |                                         |
-|                        |                     | Identifier for each unqiue Product      |
+|                        |                     | Identifier for each unique Product      |
 +------------------------+---------------------+-----------------------------------------+
 |                        | category_id         | Foreign Key                             |
 |                        |                     |                                         |
@@ -99,7 +99,7 @@ editor: visual
 +------------------------+---------------------+-----------------------------------------+
 | 3.  Product Categories | category_id         | Primary Key                             |
 |                        |                     |                                         |
-|                        |                     | Identifier for each unqiue\             |
+|                        |                     | Identifier for each unique\             |
 |                        |                     | product category                        |
 +------------------------+---------------------+-----------------------------------------+
 |                        | category_name       | Name of the product category            |
@@ -108,7 +108,7 @@ editor: visual
 +------------------------+---------------------+-----------------------------------------+
 | 4.  Customers          | customer_id         | Primary Key                             |
 |                        |                     |                                         |
-|                        |                     | Identifier for each unqiue customer     |
+|                        |                     | Identifier for each unique customer     |
 +------------------------+---------------------+-----------------------------------------+
 |                        | first_name          | First Name of the customer              |
 +------------------------+---------------------+-----------------------------------------+
@@ -124,7 +124,7 @@ editor: visual
 +------------------------+---------------------+-----------------------------------------+
 | 5.  Transactions       | transaction_id      | Primary Key                             |
 |                        |                     |                                         |
-|                        |                     | Identifier for each unqiue\             |
+|                        |                     | Identifier for each unique\             |
 |                        |                     | transaction                             |
 +------------------------+---------------------+-----------------------------------------+
 |                        | customer_id         | Foreign Key                             |
@@ -151,7 +151,7 @@ editor: visual
 | 6.  Promotions         | promotion_id        | Primary Key                             |
 |                        |                     |                                         |
 |                        |                     | Identifier for each\                    |
-|                        |                     | unqiue promotion                        |
+|                        |                     | unique promotion                        |
 +------------------------+---------------------+-----------------------------------------+
 |                        | discount_code       | Unique code for the discount            |
 +------------------------+---------------------+-----------------------------------------+
@@ -165,7 +165,7 @@ editor: visual
 +------------------------+---------------------+-----------------------------------------+
 | 7.  Order details      | order_detail_id     | Primary Key                             |
 |                        |                     |                                         |
-|                        |                     | Identifier for each unqiue Order detail |
+|                        |                     | Identifier for each unique Order detail |
 +------------------------+---------------------+-----------------------------------------+
 |                        | order_id            | Foreign Key                             |
 |                        |                     |                                         |
@@ -195,27 +195,27 @@ editor: visual
 
 : Entity Attribute Data Dictionary
 
-+--------------+------------------------+-------------------------------------+
-| Relationship | Attribute              | Description                         |
-+:=============+:=======================+:====================================+
-| Order        | order_id               | Primary Key                         |
-|              |                        |                                     |
-|              |                        | Identifier for each unqiue Order    |
-+--------------+------------------------+-------------------------------------+
-|              | customer_id            | Foreign Key                         |
-|              |                        |                                     |
-|              |                        | Identifier for customers since\     |
-|              |                        | multiple orders can come\           |
-|              |                        | from multiple orders.               |
-+--------------+------------------------+-------------------------------------+
-|              | order_date             | Date of order placement             |
-+--------------+------------------------+-------------------------------------+
-|              | estimate_delivery_date | Delivery date of the order          |
-+--------------+------------------------+-------------------------------------+
-|              | order_status           | Classification of the order\        |
-|              |                        | depending on its current status\    |
-|              |                        | i.e., shipped, cancelled or pending |
-+--------------+------------------------+-------------------------------------+
++---------------+------------------------+-------------------------------------+
+| Relationship  | Attribute              | Description                         |
++:==============+:=======================+:====================================+
+| Order         | order_id               | Primary Key                         |
+|               |                        |                                     |
+|               |                        | Identifier for each unique Order    |
++---------------+------------------------+-------------------------------------+
+|               | customer_id            | Foreign Key                         |
+|               |                        |                                     |
+|               |                        | Identifier for customers since\     |
+|               |                        | multiple orders can come\           |
+|               |                        | from multiple orders.               |
++---------------+------------------------+-------------------------------------+
+|               | order_date             | Date of order placement             |
++---------------+------------------------+-------------------------------------+
+|               | estimate_delivery_date | Delivery date of the order          |
++---------------+------------------------+-------------------------------------+
+|               | order_status           | Classification of the order\        |
+|               |                        | depending on its current status\    |
+|               |                        | i.e., shipped, cancelled or pending |
++---------------+------------------------+-------------------------------------+
 
 : Relationship Attribute Data Dictionary
 
@@ -459,6 +459,24 @@ CREATE TABLE IF NOT EXISTS 'transactions' (
 );
 "
 ```
+
+Data Validation-Quarto:\
+We employed a series of data validation checks to ensure data quality and assess data integrity. Below are the steps taken as well as their outcomes.
+
+Primary Key Validation:\
+We verified that the first column of each dataset contained unique identifiers, which is essential for primary keys. Our validation checks confirmed that there were no duplicate entries, ensuring the integrity of our data model.
+
+Duplicate Entries Check: \
+Our script checked for duplicates in the first column, designed to flag any replication of primary keys. The results confirmed that each dataset had unique identifiers across all entries.
+
+Phone Number Format Check:\
+The following code verifies the format of phone number within the \`’Customers” dataset to ensure that they adhere to the specified UK format (+44 7XXX-XXX-XXX). Results suggest the correctness of each phone number, confirming that they align with the format.
+
+Missing Values Assessment:\
+The script aims to detect missing values in any column. The results imply that no missing values were identified across all entries, thus confirming a complete dataset.
+
+Email Format Verification:\
+We executed a script to ensure that email addresses within out data set follow a certain format of [firstname.lastname\@email.com](mailto:firstname.lastname@email.com). The test ensures that all email formats are correct following the specified pattern.
 
 ## Data Pipeline Generation
 
