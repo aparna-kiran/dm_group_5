@@ -32,7 +32,7 @@ jobs:
           Rscript R/data_importing.R
       - name: Execute data automation R script
         run: |
-          Rscript R/data_validation.R
+          Rscript R/db_automation.R
       - name: Execute data analysis R script
         run: |
           Rscript R/data_transformation.R
