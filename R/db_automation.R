@@ -76,6 +76,7 @@ for (tablename in table_names){
           print("Order Details are appending")
         }
       }
+    }
       #Doing the above workflow for orders
     if(tablename == "orders"){
       for (i in seq_along(table_files)){
