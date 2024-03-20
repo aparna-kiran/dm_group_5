@@ -40,3 +40,12 @@ jobs:
         run: |
           git config --global user.email "aparnakiran.as@gmail.com"
           git config --global user.name "aparna-kiran"   
+          git add --all figures/
+      - name: Commit files
+        run: |
+          git commit -m "Adding all figures"
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            branch: main
