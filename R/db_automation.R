@@ -18,23 +18,31 @@ for (tablename in table_names){
   table_files <- grep(tablename, data_files, ignore.case = TRUE, value = TRUE)
   print(table_files)
   
+  #checking if there is more than one dataset for each table name
   if(length(table_files) > 1){
     if(tablename == "customers"){
       for (i in seq_along(table_files)){
+        #importing customers database table
         existing_dataset <- dbReadTable(db_connection, tablename)
+        #defining the file path of new dataset
         filepath <- paste0(directory,table_files[i])
         dataset <- read_csv(filepath, col_types = cols())
         
+        #making all primary keys of max length
         id_length <- max(nchar(existing_dataset$customer_id))
+        #adding leading zeroes
         existing_dataset$customer_id <- sprintf(paste0("%0", id_length, "d"), as.numeric(existing_dataset$customer_id))
         
+        #filtering new fields from the new dataset that is not existing in the table
         filtered_dataset <- dataset[!dataset$customer_id %in% existing_dataset$customer_id, ]
+        #if there are new fields then append them to the sql table
         RSQLite::dbWriteTable(db_connection,tablename, filtered_dataset, append=TRUE)
         if(nrow(filtered_dataset) != 0){
           print("Customers are appending")
         }
       }
     }
+    #Doing the above workflow for products
     if(tablename == "products"){
       for (i in seq_along(table_files)){
         existing_dataset <- dbReadTable(db_connection, tablename)
@@ -52,6 +60,7 @@ for (tablename in table_names){
         }
       }
     }
+    #Doing the above workflow for order details
     if(tablename == "order_details"){
       for (i in seq_along(table_files)){
         existing_dataset <- dbReadTable(db_connection, tablename)
@@ -67,7 +76,7 @@ for (tablename in table_names){
           print("Order Details are appending")
         }
       }
-    }
+      #Doing the above workflow for orders
     if(tablename == "orders"){
       for (i in seq_along(table_files)){
         existing_dataset <- dbReadTable(db_connection, tablename)
@@ -84,6 +93,7 @@ for (tablename in table_names){
         }
       }
     }
+      #Doing the above workflow for promotions
     if(tablename == "promotions"){
       for (i in seq_along(table_files)){
         existing_dataset <- dbReadTable(db_connection, tablename)
@@ -100,6 +110,7 @@ for (tablename in table_names){
         }
       }
     }
+      #Doing the above workflow for suppliers
     if(tablename == "suppliers"){
       for (i in seq_along(table_files)){
         existing_dataset <- dbReadTable(db_connection, tablename)
@@ -116,6 +127,7 @@ for (tablename in table_names){
         }
       }
     }
+      #Doing the above workflow for transactions
     if(tablename == "transactions"){
       for (i in seq_along(table_files)){
         existing_dataset <- dbReadTable(db_connection, tablename)
@@ -132,6 +144,7 @@ for (tablename in table_names){
         }
       }
     }
+      #Doing the above workflow for product categories
     if(tablename == "product_categories"){
       for (i in seq_along(table_files)){
         existing_dataset <- dbReadTable(db_connection, tablename)

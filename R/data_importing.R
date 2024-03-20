@@ -2,24 +2,35 @@ library(readr)
 library(RSQLite)
 
 #Data Validation
+
+#setting count to 0 for for 5 validation checks
 count <- 0
+
+#to list the data sets
 data_files <- list.files("data_uploads/")
+
 #Check if the first column of each file is a primary
 for (variable in data_files) {
+  #to get the filepath of datafiles
   this_filepath <- paste0("data_uploads/", variable)
+  #to read the data files
   this_file_contents <- readr::read_csv(this_filepath, col_types = cols())
+  
   number_of_rows <- nrow(this_file_contents)
   print(paste0("Checking for: ", variable))
+  #check the number of rows and count of primary keys
   print(paste0(" is ", nrow(unique(this_file_contents[, 1]))==number_of_rows))
   
   if(nrow(unique(this_file_contents[, 1]))==number_of_rows){
     count <- 1
   }
+  
   #Check duplicates of the first column
   duplicates <- duplicated(this_file_contents[[1]])
   number_of_duplicates <- sum(duplicates)
   print(paste0("Checking for duplicates in '", variable, "': ", number_of_duplicates, " duplicates found"))
   
+  # the count will be 2 if this validation is passed
   if(number_of_duplicates==0 && count == 1){
     count <- 2
   }
@@ -38,7 +49,7 @@ for (variable in data_files) {
 #Check email is in format of xxx@xxx.com
 # "customers' dataset contains the phone numbers
 customer_data_path <- "data_uploads/customers.csv"
-customer_data <- read_csv(customer_data_path)
+customer_data <- read_csv(customer_data_path, col_types = cols())
 
 email_pattern <- "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
 
@@ -63,7 +74,7 @@ if (all(email_format_correct) && count == 3) {
 #Check phone number is in format of +44 7XXX-XXX-XXX
 # "customers' dataset contains the phone numbers
 customer_data_path <- "data_uploads/customers.csv"
-customer_data <- read_csv(customer_data_path)
+customer_data <- read_csv(customer_data_path, col_types = cols())
 
 # Define the phone number format
 phone_pattern <- "^\\+44 7\\d{3}-\\d{3}-\\d{3}$"
@@ -83,14 +94,17 @@ if (all(phone_format_correct) && count == 4) {
   print(incorrect_phones)
 }
 
+#Printing this message if all validation checks are passed
 if (count == 5) {
   cat("The dataset passed all five data validation tests")
 }
 
 ## Data Importing
 
+#db connection
 db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"ecommerce.db")
 
+#Dropping the tables if they exists from the database
 RSQLite::dbExecute(db_connection, "DROP TABLE IF EXISTS customers")
 RSQLite::dbExecute(db_connection, "DROP TABLE IF EXISTS order_details")
 RSQLite::dbExecute(db_connection, "DROP TABLE IF EXISTS transactions")
@@ -112,5 +126,6 @@ RSQLite::dbWriteTable(db_connection,"suppliers","data_uploads/suppliers.csv",app
 RSQLite::dbWriteTable(db_connection,"promotions","data_uploads/promotions.csv",append=TRUE)
 RSQLite::dbWriteTable(db_connection,"orders","data_uploads/orders.csv",append=TRUE)
 
+#Disconnecting the db connection
 RSQLite::dbDisconnect(db_connection)
 

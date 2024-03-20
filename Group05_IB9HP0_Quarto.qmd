@@ -17,7 +17,7 @@ editor: visual
 #### 1.1 E-R Diagram Design:
 
 1.  E-R Diagram:\
-    We created an Entity-Relationship diagram for an e-commerce store by first identifying a total of 7 key entities namely suppliers, customers, products, product categories, order details, transactions and promotions. Relationships were created to better define the connection between two entities which included provide, belong to, order and make. Attributes were created to detail the information held within every entity. Order relationship was given multiple attributes to better explain the nature of the relationship. After analysis of the ER diagram, to efficiently define the data held within shipping address attribute, it was given further attributes and used as a composite attribute for order details.\
+    We created an Entity-Relationship diagram for an e-commerce store by first identifying a total of 7 key entities namely suppliers, customers, products, product categories, order details, transactions and promotions. Relationships were created to better define the connection between two entities which included provide, belong to, order and make. Attributes were created to detail the information held within every entity. Order relationship was given multiple attributes to better explain the nature of the relationship. \
     \
     Assumptions:
 
@@ -33,11 +33,11 @@ editor: visual
 
 2.  Relationship Sets:
 
-    ![Suppliers PROVIDE products. Many-to-many relationship (M:N).](Relationship%20Sets/Suppliers%20PROVIDE%20products.png "Many-to-many relationship (M:N)."){fig-align="center" width="271"}
+    ![Suppliers PROVIDE products. Many-to-many relationship (M:N).](Relationship%20Sets/Suppliers%20PROVIDE%20Products.png "Many-to-many relationship (M:N)"){fig-align="center" width="311"}
 
     ![Products BELONG TO Product Categories. Many-to-one relationship (N:1).](Relationship%20Sets/Products%20BELONG%20TO%20Product%20Categories.png "Many-to-one relationship (N:1)."){fig-align="center" width="373"}
 
-    ![Customers ORDER products. Many-to-many relationship (M:N).](Relationship%20Sets/Customers%20ORDER%20products.png "Many-to-many relationship (M:N)."){fig-align="center" width="348"}
+    ![Customers ORDER products. Many-to-many relationship (M:N).](Relationship%20Sets/Customers%20ORDER%20Products.png "Many-to-many relationship (M:N)"){fig-align="center" width="357"}
 
     ![Customers MAKE Transaction. Many-to-many relationship (M:N).](Relationship%20Sets/Customers%20MAKE%20Transaction.png "Many-to-many relationship (M:N)."){fig-align="center" width="357"}
 
@@ -223,110 +223,59 @@ editor: visual
 
 #### 2.1 Synthetic Data Generation:
 
-To generate synthetic data for our e-commerce database, we utilised ChatGPT. Our approach involved providing ChatGPT with detailed prompts specifying the attributes, relationships, and constraints relevant to each database entity. These prompts ensured that the data generated would reflect realistic e-commerce scenarios while maintaining consistency across entities. 
+To generate synthetic data, we utilised ChatGPT. Our approach involved providing ChatGPT with detailed prompts specifying the attributes, relationships, and constraints relevant to each database entity. These prompts ensured that the data generated would reflect realistic e-commerce scenarios while maintaining consistency across entities. 
 
 Customers:\
-We constrained the "Customers" dataset to consist of UK phone numbers, as well as names with matching emails, ensuring a dataset that would closely resemble an actual customer database in the UK. See the following prompt:
+We constrained the "Customers" dataset to consist of UK phone numbers, as well as names with matching emails, ensuring a dataset that would closely resemble an actual customer database in the UK.
 
 ![Customers Prompt.](Prompts/Customers.png "Customers Prompt"){width="606"}
 
 Suppliers:\
-In the "Suppliers" data set, we ensured that supplier names matched email formats. See the following prompt:
+In the "Suppliers" data set, we ensured that supplier names matched email formats.
 
 ![Suppliers Prompt.](Prompts/Suppliers.png "Suppliers Prompt"){width="606"}
 
 Product Categories:\
-The prompt is for the generation of "Product Categories", with 8 unique category identifiers and corresponding names across 8 entries. See the following prompt:
+The prompt is for the generation of "Product Categories", with 8 unique category identifiers and corresponding names across 8 entries.
 
 ![Product Categories Prompt.](Prompts/Product%20Categories.png "Product Categories Prompt"){width="606"}
 
 Promotions:\
-For the "Promotions" entity, we focused on generating realistic discount codes and rates, alongside logically constrained start, and end dates for the discounts. See the following prompt:
+For the "Promotions" entity, we focused on generating realistic discount codes and rates, alongside logically constrained start, and end dates for the discounts.
 
 ![Promotions Prompt.](Prompts/Promotions.png "Promotions Prompt"){width="606"}
 
 Products:\
-The prompt describes generating a "Products" dataset for an e-commerce platform, featuring unique product IDs, associated category and supplier IDs, product names, SKUs, descriptions, prices, and stock quantities, across 1000 rows. See the following prompt:
+The prompt describes generating a "Products" dataset for an e-commerce platform, featuring unique product IDs, associated category and supplier IDs, product names, SKUs, descriptions, prices, and stock quantities, across 1000 rows.
 
 ![Products Prompt.](Prompts/Products.png "Products Prompt"){width="606"}
 
 Orders and Order Details:\
-This prompt outlines the creation of two interconnected datasets, "Orders" and "Order Details," for an e-commerce platform, necessitating their simultaneous generation to maintain consistency. Within the datasets, we focused on imitating a realistic relationship between orders, customers, and products while incorporating accurate order statuses and delivery timelines. See the following prompt:
+This prompt outlines the creation of two interconnected datasets, "Orders" and "Order Details," for an e-commerce platform to maintain consistency. Within the datasets, we focused on imitating a realistic relationship between orders, customers, and products while incorporating accurate order statuses and delivery timelines.
 
 ![Orders and Order Details Prompt.](Prompts/Orders%20and%20Order%20Details.png "Orders and Order Details Prompt"){width="437"}
 
 Transactions:\
-In this prompt, we linked each transaction to customer and order details, including distinct invoice numbers and specific payment methods, while aligning transaction dates with their respective order dates. See the following prompt:
+In this prompt, we linked each transaction to customer and order details, including distinct invoice numbers and specific payment methods, while aligning transaction dates with their respective order dates.
 
 ![Transactions Prompt.](Prompts/Transactions.png "Transactions Prompt"){width="552"}
 
-The following prompts enabled us to generate 8 datasets for each entity, setting a strong foundation for robust analysis, given the realistic constraints and patterns put in place.
+The prompts enabled us to generate 8 datasets for each entity, setting a strong foundation for robust analysis, given the realistic constraints and patterns put in place.
 
 #### 2.2 Data Import and Quality Assurance
 
-After uploading the data files, the rows and columns of each dataset was displayed using the below code:
+**Data Validation:**
 
-```{r}
-data_files <- list.files("data_uploads/Dataset/")
-
-suffix <- "-Table 1"
-
-# Rename files
-for (file in data_files) {
-  # Create a new filename
-  new_filename <- paste0("data_uploads/Dataset/", gsub(suffix, "", file))
-  file <- paste0("data_uploads/Dataset/", file)
-  # Rename the file
-  file.rename(from = file, to = new_filename)
-}
-```
-
-To import the data sets into the SQLite database, we used the below code:
-
-```{r}
-data_files <- list.files("data_uploads/Dataset/")
-
-db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"ecommerce.db")
-
-# To display the rows and columns of each dataset and 
-# To import each csv file into the database table
-for (file in data_files) {
-  this_filepath <- paste0("data_uploads/Dataset/", file)
-  this_file_contents <- readr::read_csv(this_filepath)
-  
-  number_of_rows <- nrow(this_file_contents)
-  number_of_columns <- ncol(this_file_contents)
-  
-  #To print the number of columns and rows of each dataset
-  print(paste0("The file: ",file,
-               " has: ",
-               format(number_of_rows,big.mark = ","),
-               " rows and ",
-               number_of_columns," columns"))
-  
-  table_name <- gsub(".csv","",file)
-  
-  #Writing the csv file contents to the database and
-  #creating the table with the table_name
-  RSQLite::dbWriteTable(db_connection,table_name,
-                        this_file_contents,overwrite=TRUE)
-  
-  #To list the database tables
-  RSQLite::dbListTables(db_connection)
-}
-
-RSQLite::dbDisconnect(db_connection)
-```
-
-Populate SQL database:\
-While constructing the schema for our SQL database, we focused on defining the data types and structures that would best represent the nature of each field. Data types such as VARCHAR were chosen to impose limits on the length of text-based fields. Meanwhile, for numerical fields, INT and DECIMAL types were used to accurately capture integer and floating-point numbers, respectively. By carefully aligning data types with the intended data structure, we create a framework that ensures data is stored in an organised manner.
-
-Customers Data Validation Code:
-
-In the above code snippets, referential integrity is effectively established through the careful definition of primary and foreign key constraints across various tables within a relational database. For example, the 'orders' table references the 'customers' table via a foreign key constraint on 'customer_id', ensuring that each order is linked to an existing customer. Similarly, the 'order_details' table contains foreign keys that reference both the 'products' table (through 'product_id') and the 'orders' table (through 'order_id'), guaranteeing that order details cannot exist without a corresponding product and order. This pattern is consistently applied across other tables, such as 'products', which references 'product_categories' and 'suppliers'; and 'transactions', which links back to 'customers' and 'orders'. These foreign key constraints ensure that relationships between tables are strictly maintained, preventing orphaned records and preserving the logical integrity of the database schema. Each foreign key declaration not only enforces referential integrity but also delineates the relational architecture of the database, illustrating a well-structured and coherent relationship model among the data entities.
-
-Data Validation-Quarto:\
 We employed a series of data validation checks to ensure data quality and assess data integrity. Below are the steps taken as well as their outcomes.
+
+```{r}
+library(readr)
+library(RSQLite)
+
+#Data Validation
+count <- 0
+data_files <- list.files("data_uploads/")
+```
 
 Primary Key Validation:\
 We verified that the first column of each dataset contained unique identifiers, which is essential for primary keys. Our validation checks confirmed that there were no duplicate entries, ensuring the integrity of our data model.
@@ -334,28 +283,431 @@ We verified that the first column of each dataset contained unique identifiers, 
 Duplicate Entries Check:\
 Our script checked for duplicates in the first column, designed to flag any replication of primary keys. The results confirmed that each dataset had unique identifiers across all entries.
 
-Phone Number Format Check:\
-The following code verifies the format of phone number within the "Customers” dataset to ensure that they adhere to the specified UK format (+44 7XXX-XXX-XXX). Results suggest the correctness of each phone number, confirming that they align with the format.
-
 Missing Values Assessment:\
 The script aims to detect missing values in any column. The results imply that no missing values were identified across all entries, thus confirming a complete dataset.
 
+```{r}
+#Check if the first column of each file is a primary
+for (variable in data_files) {
+  #to get the filepath of datafiles
+  this_filepath <- paste0("data_uploads/", variable)
+  #to read the data files
+  this_file_contents <- readr::read_csv(this_filepath, col_types = cols())
+  
+  number_of_rows <- nrow(this_file_contents)
+  print(paste0("Checking for: ", variable))
+  #check the number of rows and count of primary keys
+  print(paste0(" is ", nrow(unique(this_file_contents[, 1]))==number_of_rows))
+  
+  if(nrow(unique(this_file_contents[, 1]))==number_of_rows){
+    count <- 1
+  }
+  
+  #Check duplicates of the first column
+  duplicates <- duplicated(this_file_contents[[1]])
+  number_of_duplicates <- sum(duplicates)
+  print(paste0("Checking for duplicates in '", 
+               variable, "': ", 
+               number_of_duplicates, " duplicates found"))
+  
+  # the count will be 2 if this validation is passed
+  if(number_of_duplicates==0 && count == 1){
+    count <- 2
+  }
+  # Calculate the number of missing values for each column
+  missing_values <- colSums(is.na(this_file_contents))
+  
+  # Print the results for the current file
+  print(paste("Missing values in", basename(this_filepath), ":"))
+  print(missing_values)
+  
+  if(sum(missing_values == 0) && count == 2){
+    count <- 3
+  }
+}
+```
+
 Email Format Verification:\
 We executed a script to ensure that email addresses within out data set follow a certain format of [firstname.lastname\@email.com](mailto:firstname.lastname@email.com). The test ensures that all email formats are correct following the specified pattern.
+
+```{r}
+#Check email is in format of xxx@xxx.com
+# "customers' dataset contains the phone numbers
+customer_data_path <- "data_uploads/customers.csv"
+customer_data <- read_csv(customer_data_path, col_types = cols())
+
+email_pattern <- "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+
+# Assuming 'email_column_name' is the actual name 
+# of the column containing email addresses
+email_column_name <- "email"
+
+# Check if the email format is correct in the specified column
+email_format_correct <- grepl(email_pattern, 
+                              customer_data[[email_column_name]])
+
+# Printing the results
+cat("Checking email format for customers dataset:\n")
+if (all(email_format_correct) && count == 3) {
+  cat("All email addresses are in the correct format.\n")
+  count <- 4
+} else {
+  incorrect_emails <-customer_data[[email_column_name]][!email_format_correct]
+  cat("The following email addresses are not in the correct format:\n")
+  print(incorrect_emails)
+}
+```
+
+Phone Number Format Check:\
+The following code verifies the format of phone number within the "Customers” dataset to ensure that they adhere to the specified UK format. Results suggest the correctness of each phone number, confirming that they align with the format.
+
+```{r}
+#Check phone number is in format of +44 7XXX-XXX-XXX
+# "customers' dataset contains the phone numbers
+customer_data_path <- "data_uploads/customers.csv"
+customer_data <- read_csv(customer_data_path, col_types = cols())
+
+# Define the phone number format
+phone_pattern <- "^\\+44 7\\d{3}-\\d{3}-\\d{3}$"
+
+# Check if the phone format is correct in the specified column
+# Replace 'phone_column_name' with the 
+# actual name of the column containing phone numbers
+phone_format_correct <- grepl(phone_pattern, customer_data$phone)
+
+# Printing the results
+cat("Checking phone format for customers dataset:\n")
+if (all(phone_format_correct) && count == 4) {
+  cat("All phone numbers are in the correct format.\n")
+  count <- 5
+} else {
+  incorrect_phones <- customer_data$phone_column_name[!phone_format_correct]
+  cat("The following phone numbers are not in the correct format:\n")
+  print(incorrect_phones)
+}
+```
+
+```{r}
+#Printing this message if all validation checks are passed
+if (count == 5) {
+  cat("The dataset passed all five data validation tests")
+}
+```
+
+Referential integrity:\
+Established through the careful definition of primary and foreign key constraints across various tables within a relational database. For example, the‘orders’ table references the ‘customers’ table via a foreign key constraint on ‘customer_id’, ensuring that each order is linked to an existing customer. Similarly, the ‘order_details’ table contains foreign keys that reference both the ‘products’ table (through ‘product_id’) and the ‘orders’ table (through ‘order_id’), guaranteeing that order details cannot exist without a corresponding product and order. This pattern is consistently applied across other tables. These foreign key constraints ensure that relationships between tables are strictly maintained, preventing orphaned records and preserving the logical integrity of the database schema
+
+**Data Importing:**
+
+To import the data sets into the SQLite database after data validation and quality assurance checks, the database connection is established. As the first step, all the tables are dropped from the database using the dbExecute function of RSQLite.
+
+ETL (Extract, Transform, Load): The dataset is extracted, then transformed and loaded to the database
+
+```{r, message=FALSE,warning=FALSE}
+#db connection
+db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"ecommerce.db")
+
+#Dropping the tables if they exists from the database
+invisible(RSQLite::dbExecute(db_connection, 
+                             "DROP TABLE IF EXISTS customers"))
+invisible(RSQLite::dbExecute(db_connection, 
+                             "DROP TABLE IF EXISTS order_details"))
+invisible(RSQLite::dbExecute(db_connection, 
+                             "DROP TABLE IF EXISTS transactions"))
+invisible(RSQLite::dbExecute(db_connection, 
+                             "DROP TABLE IF EXISTS products"))
+invisible(RSQLite::dbExecute(db_connection, 
+                             "DROP TABLE IF EXISTS product_categories"))
+invisible(RSQLite::dbExecute(db_connection, 
+                             "DROP TABLE IF EXISTS suppliers"))
+invisible(RSQLite::dbExecute(db_connection, 
+                             "DROP TABLE IF EXISTS promotion"))
+invisible(RSQLite::dbExecute(db_connection, 
+                             "DROP TABLE IF EXISTS orders"))
+```
+
+After the tables are dropped, the physical database schema is newly created into the SQLite database from the primary data sets in the data uploads folder.
+
+```{r}
+# Writing the csv file contents to the database and
+# Creating the table with the table_name
+RSQLite::dbWriteTable(db_connection,
+                      "customers","data_uploads/customers.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,
+                      "order_details",
+                      "data_uploads/order_details.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,
+                      "transactions",
+                      "data_uploads/transactions.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,
+                      "products",
+                      "data_uploads/products.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,
+                      "product_categories",
+                      "data_uploads/product_categories.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,
+                      "suppliers",
+                      "data_uploads/suppliers.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,
+                      "promotions",
+                      "data_uploads/promotions.csv",append=TRUE)
+RSQLite::dbWriteTable(db_connection,
+                      "orders",
+                      "data_uploads/orders.csv",append=TRUE)
+
+#Disconnecting the db connection
+RSQLite::dbDisconnect(db_connection)
+```
 
 ## Data Pipeline Generation
 
 #### 3.1 Github Repository and Workflow Setup
 
-ETL (Extract, transform, load)
+To effectively manage and version-control our project, including database files, scripts, and necessary documents, we established a GitHub repository as a centralized location to store and organize them. The GitHub repo link is provided here: <https://github.com/aparna-kiran/dm_group_5/>
 
-```{r, include=FALSE}
-#install.packages("dplyr")
-#install.packages("ggplot2")
-#install.packages("tidyr")
-#install.packages("lubridate")
-#install.packages("readxl")
-#install.packages("scales")
+All project-related scripts, including data validation, database updates, and data analysis, were included in the repository. Any necessary documents, such as project documentation or instructions, were also incorporated. By utilizing version control, we maintained a comprehensive history of changes made to our project, enabling us to track progress and collaborate effectively.
+
+#### 3.2 Github Actions for Continuous Integration
+
+To streamline and automate key data management processes, we have used GitHub Actions, including automating data validation, updating databases with new data, and conducting basic data analysis tasks.
+
+We have set up workflows within a file named ‘etl.yaml’ GitHub that get triggered automatically on the push event to our repositories. This ensures that our data management processes are initiated seamlessly and consistently. We have implemented actions that run data validation scripts to check the integrity and quality of our data, ensuring it meets predefined standards before any further processing.
+
+![Github Workflow Code.](Github%20Workflow/Github%20Workflow.png "Github Workflow Code")
+
+```{r}
+library(readr)
+library(RSQLite)
+# Get a list of file names in the directory
+directory <- "data_uploads/"
+
+#listing data files
+data_files <- list.files(directory, pattern = "\\.csv$")
+data_files
+
+#establishing db connection
+db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"ecommerce.db")
+
+#listing the database table names
+table_names <- RSQLite::dbListTables(db_connection) 
+table_names
+```
+
+Through GitHub Actions, we have automated the integration of new data into our databases, ensuring that our data remains up-to-date and accurate. Then, we automated the execution of basic data analysis scripts. By automating these tasks, we reduced manual effort and the risk of error, leading to increased efficiency in our data management processes.
+
+The code below updates the SQLite database with the new data sets. It checks if any fields in the new data file are already existing in the database and if there are any, then they are not appended to the table.
+
+```{r}
+for (tablename in table_names){
+  
+  # Filter files containing "customers" in their name
+  table_files <- grep(tablename, data_files, ignore.case = TRUE, value = TRUE)
+  
+  # Checking if there is more than one dataset for each table name
+  if(length(table_files) > 1){
+    if(tablename == "customers"){
+      for (i in seq_along(table_files)){
+        # Importing customers database table
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        # Defining the file path of new dataset
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        # Making all primary keys of max length 
+        id_length <- max(nchar(existing_dataset$customer_id))
+        #adding leading zeroes
+        existing_dataset$customer_id <- sprintf(
+          paste0("%0", id_length, "d"), 
+          as.numeric(existing_dataset$customer_id))
+        
+        # Filtering new fields from the new dataset 
+        # that does not exist in the table
+        filtered_dataset <- dataset[!dataset$customer_id %in% 
+                                      existing_dataset$customer_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, 
+                              filtered_dataset, 
+                              append=TRUE)
+        # If there are new fields then append them to the sql table
+        if(nrow(filtered_dataset) != 0){
+          print("Customers are appending")
+        }
+      }
+    }
+    # Doing the above workflow for products
+    if(tablename == "products"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$product_id))
+        existing_dataset$product_id <- sprintf(
+          paste0("%0", 
+                                                      id_length, "d"), 
+                                               as.numeric(
+                                                 existing_dataset$product_id)
+                                               )
+        
+        filtered_dataset <- dataset[!dataset$product_id
+                                    %in% 
+                                      existing_dataset$product_id, ]
+        
+        RSQLite::dbWriteTable(db_connection,tablename, 
+                              filtered_dataset, 
+                              append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Products are appending")
+        }
+      }
+    }
+    # Doing the above workflow for order details
+    if(tablename == "order_details"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$order_detail_id))
+        existing_dataset$order_detail_id <- sprintf(
+          paste0("%0", id_length, "d"), 
+          as.numeric(existing_dataset$order_detail_id))
+        
+        filtered_dataset <- dataset[!dataset$order_detail_id
+                                    %in% 
+                                      existing_dataset$order_detail_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, 
+                              new_dataset, 
+                              append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Order Details are appending")
+        }
+      }
+    }
+    # Doing the above workflow for orders
+    if(tablename == "orders"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$order_id))
+        existing_dataset$order_id <- sprintf(paste0("%0", id_length, "d"), 
+                                             as.numeric(
+                                               existing_dataset$order_id))
+        
+        filtered_dataset <- dataset[!dataset$order_id %in% 
+                                      existing_dataset$order_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, 
+                              new_dataset, 
+                              append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Orders are appending")
+        }
+      }
+    }
+    # Doing the above workflow for promotions
+    if(tablename == "promotions"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$promotion_id))
+        existing_dataset$promotion_id <- sprintf(
+          paste0("%0", id_length, "d"), 
+          as.numeric(existing_dataset$promotion_id))
+        
+        filtered_dataset <- dataset[!dataset$promotion_id %in% 
+                                      existing_dataset$promotion_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, 
+                              new_dataset, 
+                              append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Promotions are appending")
+        }
+      }
+    }
+    # Doing the above workflow for suppliers
+    if(tablename == "suppliers"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$supplier_id))
+        existing_dataset$supplier_id <- sprintf(
+          paste0("%0", id_length, "d"), 
+          as.numeric(existing_dataset$supplier_id))
+        
+        filtered_dataset <- dataset[!dataset$supplier_id %in% 
+                                      existing_dataset$supplier_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, 
+                              new_dataset, 
+                              append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Suppliers are appending")
+        }
+      }
+    }
+    # Doing the above workflow for transactions
+    if(tablename == "transactions"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$transaction_id))
+        existing_dataset$transaction_id <- sprintf(
+          paste0("%0", id_length, "d"), 
+          as.numeric(existing_dataset$transaction_id))
+        
+        filtered_dataset <- dataset[!dataset$transaction_id 
+                                    %in% 
+                                      existing_dataset$transaction_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, 
+                              new_dataset, 
+                              append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Transactions are appending")
+        }
+      }
+    }
+    # Doing the above workflow for product categories
+    if(tablename == "product_categories"){
+      for (i in seq_along(table_files)){
+        existing_dataset <- dbReadTable(db_connection, tablename)
+        filepath <- paste0(directory,table_files[i])
+        dataset <- read_csv(filepath, col_types = cols())
+        
+        id_length <- max(nchar(existing_dataset$category_id))
+        existing_dataset$category_id <- sprintf(
+          paste0("%0", id_length, "d"), 
+          as.numeric(existing_dataset$category_id))
+        
+        filtered_dataset <- dataset[!dataset$category_id %in% 
+                                      existing_dataset$category_id, ]
+        RSQLite::dbWriteTable(db_connection,tablename, 
+                              new_dataset, 
+                              append=TRUE)
+        if(nrow(filtered_dataset) != 0){
+          print("Product Categories are appending")
+        }
+      }
+    }
+  }
+}
+
+RSQLite::dbDisconnect(db_connection)
+
+```
+
+## Data Analysis
+
+#### 4.1, 4.2 Advanced Data Analysis in R and Reporting with Quarto
+
+In our e-commerce platform, we extract key characteristics such as total orders, total revenue, and best-selling products. We analyze these results across different time series, including seasonally, quarterly, and annually to uncover patterns and trends.
+
+```{r, message=FALSE}
 
 library(dplyr)
 library(ggplot2)
@@ -366,18 +718,8 @@ library(scales)
 
 ```
 
-#### 3.2 Github Actions for Continuous Integration
-
-## Data Analysis
-
-#### 4.1, 4.2 Advanced Data Analysis in R and Reporting with Quarto
-
-In our e-commerce platform, we extract key characteristics such as total orders, total revenue, best-selling products, and least-selling products, along with identifying top-selling suppliers. We analyze these results across different time series, including seasonally and quarterly, to uncover patterns and trends. Additionally, we examine total revenue by region and assess transaction methods used by various customers. This comprehensive analysis allows us to generate more valuable insights, enhancing our understanding of market dynamics and customer preferences.
-
-```{r, include=FALSE}
+```{r, message=FALSE}
 # Reading required database
-library(readr)
-library(dplyr)
 db_connection <- RSQLite::dbConnect(RSQLite::SQLite(),"ecommerce.db")
 
 customers <- RSQLite::dbReadTable(db_connection, "customers")
@@ -456,8 +798,8 @@ quarterly_revenue_all_years_plot <- ggplot(quarterly_revenue,
                                            aes(x = quarter, 
                                                y = total_revenue, 
                                                group = 1)) +
-  geom_line() +
-  geom_point() +
+  geom_line(color = "blue") +
+  geom_point(color = "red", size = 3) +
   labs(title = "Total Revenue per Quarter Across All Years", 
        x = "Quarter", y = "Total Revenue") +
   theme_minimal() +
@@ -544,7 +886,7 @@ print(revenue_by_city_plot)
 
 ```
 
-Analysing the total revenue across different cities, Belfast emerges on the top with approximately £41,000, while the other cities exhibit varied results. Cardiff and Birmingham also showcase strong revenues, with around £39,000 and £36,000, respectively. London and Manchester, notable for their economic significance, are at the lower end among the first 10 cities listed, each with around £24,000 to £25,000. Geographically, this indicates a diverse economic landscape, with the highest revenues not necessarily in the traditionally dominant economic centers of the UK.
+Analysing the total revenue across different cities, Belfast emerges on the top with approximately £41,000. London and Manchester, notable for their economic significance, are at the lower end among the first 10 cities listed, each with around £24,000 to £25,000. Geographically, this indicates a diverse economic landscape, with the highest revenues not necessarily in the traditionally dominant economic centers of the UK.
 
 ```{r}
 # Exclude the cancelled orders 
@@ -571,7 +913,7 @@ transaction_methods_plot <- ggplot(transactions_summary,
                                        fill=transaction_method)) +
   geom_col(width = 0.5) +  
   geom_text(aes(label = number_of_transactions), 
-            vjust = -0.3, color = "black", size = 3.5) + 
+            vjust = -0.3, color = "black", size = 3.3) + 
   labs(title = "Transaction Methods Based on Customers", 
        x = "Transaction Method",
        y = "Number of Transactions",
@@ -604,7 +946,8 @@ yearly_orders_plot <- ggplot(yearly_orders_quantity,
                                  y = total_quantity, group = 1)) +
   geom_line(color = "blue") +
   geom_point(color = "red", size = 3) +
-  labs(title = "Total Orders per Year", x = "Year", y = "Total Quantity Sold") +
+  labs(title = "Total Orders per Year", x = "Year", 
+       y = "Total Quantity Sold") +
   theme_minimal() +
   scale_y_continuous(limits = c(0, NA), breaks = seq(0, 500, by = 100))
 
@@ -659,7 +1002,7 @@ ggsave(plot = seasonal_orders_plot,
 print(seasonal_orders_plot)
 ```
 
-The seasonal trend for total orders from 2020 to 2023 shows considerable variability, with no consistent pattern emerging across the years. The spring of 2020 marked the highest number of orders at 681, suggesting a seasonal peak at that time. Notably, orders in the fall have shown growth, particularly from 2021 to 2022 where they rose from 119 to 188. The winter of 2022 also experienced a significant rise to 160 orders, exceeding the counts of both preceding years. Conversely, the summer of 2023 saw a decline to 144 orders, substantially lower than the previous year's 158, indicating a reduction in demand or the impact of other variables.
+The seasonal trend for total orders from 2020 to 2023 shows considerable variability, with no consistent pattern emerging across the years. The spring of 2020 marked the highest number of orders at 681. Notably, orders in the fall have shown growth, particularly from 2021 to 2022 where they rose from 119 to 188. The winter of 2022 also experienced a significant rise to 160 orders, exceeding the counts of both preceding years.
 
 ```{r}
 # Exclude "cancelled" orders
@@ -706,13 +1049,12 @@ best_selling_products_plot <- ggplot(top_selling_products_with_names,
   theme_minimal() +
   theme(axis.text.y = element_text(angle = 0), legend.position = "none")
 
-ggsave(plot = best_selling_products_plot, filename = "images/best_selling_products_plot.png", 
+ggsave(plot = best_selling_products_plot, 
+       filename = "images/best_selling_products_plot.png", 
        width = 10, 
        height = 6, dpi = 300)
 print(best_selling_products_plot)
 ```
-
-The top 5 selling products are ranked as follows: 'Whole Grain Bread 4zv' at 38 units, followed by 'Yoga Mat WZQ' at 36, 'The Great Adventure EIO' at 35, 'Yoga Mat 6ne' at 33, and both 'Organic Honey H4w' and 'Eau de Toilette MZw' at 32 units each, showcasing a varied consumer interest across food, fitness, and personal care items.
 
 ```{r}
 # Ensure order_date is Date type and calculate season
@@ -754,7 +1096,7 @@ top_5_seasonal_sales <- seasonal_sales %>%
 print(top_5_seasonal_sales)
 ```
 
-Throughout 2020 to 2023, 'Whole Grain Bread 4zv' is a consistent favorite, leading in fall with 16 units and remaining strong in summer with 13. 'Organic Honey' is a fall staple, with two varieties selling 13 and 11 units respectively, while 'Camping Tent gTa' tops spring sales at 17 units, aligning with outdoor activity in warmer weather. Tech products peak in summer and winter, with 'Smartphone X12 Jmx' selling 15 units in summer and 'Eau de Toilette MZw' becoming the winter favorite at 14 units. These patterns suggest a blend of steady demand for consumables and seasonal shifts towards outdoor gear and personal electronics.
+Throughout 2020 to 2023, ‘Whole Grain Bread 4zv’ is a consistent favorite, leading in fall with 16 units and remaining strong in summer with 13, while ‘Camping Tent gTa’ tops spring sales at 17 units, aligning with outdoor activity in warmer weather. Tech products peak in summer and winter, with ‘Smartphone X12 Jmx’ selling 15 units in summer and ‘Eau de Toilette MZw’ becoming the winter favorite at 14 units.
 
 ```{r}
 # Filter out cancelled orders
@@ -824,7 +1166,7 @@ best_selling_categories_plot <- ggplot(best_selling_category,
                                                  total_sales)), 
             position = position_dodge(width = 0.5), 
             hjust = -0.1, 
-            size = 2.8, 
+            size = 2.5, 
             color = "black") +
   labs(title = "Best Selling Product Category",
        x = "Total Sales", 
@@ -837,8 +1179,6 @@ ggsave(plot = best_selling_categories_plot,
        width = 10, height = 6, dpi = 300)
 print(best_selling_categories_plot)
 ```
-
-Fashion leads as the top category with 268 total sales, closely followed by Groceries at 265. Sports & Outdoors is also popular with 245 sales. Beauty & Personal Care and Home & Kitchen trail with 208 and 202 sales, respectively.
 
 ```{r}
 # Ensure order_date is Date type and define seasons
@@ -887,7 +1227,7 @@ best_selling_categories_per_season <- best_selling_categories_per_season %>%
 print(best_selling_categories_per_season)
 ```
 
-In the fall, Groceries lead the best-selling product category with 120 units, followed by Fashion at 103, and Sports & Outdoors at 83 units. Beauty & Personal Care and Home & Kitchen also perform well with 80 and 74 units respectively. In the spring, Groceries again topped the list with 113 units, while Sports & Outdoors rose to a close second with 103 units, overtaking Fashion which was at 99 units. Toys & Games and Books show strong sales in spring, at 91 and 90 units, indicating a surge in leisure and educational activities. This pattern suggests that essentials like groceries have a steady demand, while other categories like Sports & Outdoors and Books gain seasonal traction.
+In the fall, Groceries lead the best-selling product category with 120 units, followed by Fashion and Sports & Outdoors. In the spring, Groceries again topped the list with 113 units, while Sports & Outdoors rose to a close second with 103 units, overtaking Fashion which was at 99 units. Toys & Games and Books show strong sales in spring, at 91 and 90 units, indicating a surge in leisure and educational activities. This pattern suggests that essentials like groceries have a steady demand, while other categories like Sports & Outdoors and Books gain seasonal traction.
 
 ```{r}
 orders <- orders %>%
@@ -975,8 +1315,6 @@ best_selling_suppliers_per_season <- seasonal_supplier_sales %>%
 print(best_selling_suppliers_per_season)
 ```
 
-Across the seasons from 2020 to 2023, 'Dyer Pena and Johnson' was the top supplier in both fall with 390 sales, while 'Casey Group' led in the spring with the highest sales at 388, and 'Moon Gillespie and Vargas' was the top in summer with 402 sales, lastly in the winter 'Glover-Russell' led with the total sales of 279.
-
 ## Conclusion and Future Improvements:
 
-Our analysis of the WBS e-commerce platform from 2020 to 2023 reveals a downward trend in annual revenue, with seasonal and quarterly variations. Various analysis conducted on the data on subjects such as on transaction methods and leading cities in revenue generation, revealed a slight preference for PayPal and identified Belfast as an unexpected frontrunner in sales, surpassing major economic centers like London and Manchester. The fluctuating demand across seasons and the identification of best and least-selling products offer strategic insights for the company.To counter the trend of declining revenue and capitalize on market dynamics, a multifaceted approach is needed. This includes product discounts, product diversification, and the enhancement of payment options to spur future growth. Additionally, a comprehensive market analysis should be undertaken to reassess product offerings and explore new market segments. The analysis of quarterly revenue and seasonal sales underscores the necessity of adaptive strategies to navigate the cyclical nature of sales effectively, optimizing revenue generation year-round. Moreover, exploring the unique revenue trends and market dynamics of each city is essential for creating tailored strategies that meet regional demands and consumer preferences. Overall, our detailed report highlights the critical improvement on market segmentation and data-informed decision-making to address e-commerce challenges effectively and foster long-term expansion in the market.
+Our analysis of the WBS e-commerce platform from 2020 to 2023 revealed a slight preference for PayPal and identified Belfast as an unexpected frontrunner in sales, surpassing major economic centers like London and Manchester. To counter the trend of declining revenue a multifaceted approach is needed. This includes product discounts, product diver- sification, and the enhancement of payment options to spur future growth. The analysis of quarterly revenue and seasonal sales underscores the necessity of adaptive strategies to navigate the cyclical nature of sales effectively, optimizing revenue generation year-round. Moreover, exploring the unique revenue trends and market dynamics of each city is essential for creating tailored strategies that meet regional demands and consumer preferences. Overall, our detailed report highlights the critical improvement on market segmentation and data-informed decision-making to foster long-term expansion in the market.
