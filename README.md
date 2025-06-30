@@ -8,3 +8,7 @@
 - Data analysis with R
 - Reporting on Quarto. 
 
+![ER Diagram](https://github.com/aparna-kiran/dm_group_5/blob/main/E-R%20Diagram/E-R%20Diagram.jpeg "ER diagram")
+
+![Data-Analysis Best-Selling Product Categories](https://github.com/aparna-kiran/dm_group_5/blob/main/images/best_selling_categories_plot.png "Best-selling product categories graph")
+
