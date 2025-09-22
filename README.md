@@ -3,13 +3,12 @@
 #### This project is the simulation of a real-world e-commerce data environment. Documentation of developing end-to-end data management. 
 
 ## Business problem:
-Imagine a e-commerce platform with 1000 products. How to simulate a real-world e-commerce data environment for this business? 
+Imagine an e-commerce platform with 1000 products. How to simulate a real-world e-commerce data environment for this business? 
 
 ## Aim of the project
 - To develop a thorough understanding of relational database design and management.
 - To gain proficiency in automating data-related tasks with GitHub Actions.
 - To enhance skills in data analysis and report generation using R and Quarto.
-
 
 ## Executive summary of the project:
 - Database Design and Implementation
@@ -25,8 +24,13 @@ Imagine a e-commerce platform with 1000 products. How to simulate a real-world e
   - Advanced Data Analysis in R
   - Comprehensive Reporting with Quarto
   
-The figure below shows the E-R diagram designed for the e-commerce website.
+1. E-R Diagram Design.
+     The key entities of this e-commerce platform has been identified and they are
+Suppliers, Customers, Products, Product Categories, Orders, Order Details, Transactions, and Promotions. The E-R was designed using an online flowchart maker website called draw.io, which is shown below.
+    
 ![ER Diagram](https://github.com/aparna-kiran/dm_group_5/blob/main/E-R%20Diagram/E-R%20Diagram.jpeg "ER diagram")
+
+2. Advanced Data Analysis in R
 
 Using R programming language, key characteristics such as total orders, total revenue, and best-selling products are extracted for the e-commerce platform. The graph below shows that the best-selling product categories.
 
