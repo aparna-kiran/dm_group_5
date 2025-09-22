@@ -2,18 +2,29 @@
 
 #### This project is the simulation of a real-world e-commerce data environment. Documentation of developing end-to-end data management. 
 
+## Business problem:
+Imagine a e-commerce platform with 1000 products. How to simulate a real-world e-commerce data environment for this business? 
+
+## Aim of the project
+- To develop a thorough understanding of relational database design and management.
+- To gain proficiency in automating data-related tasks with GitHub Actions.
+- To enhance skills in data analysis and report generation using R and Quarto.
+
 
 ## Executive summary of the project:
-- Database design using E-R diagram
-- Data generation and management
-- Database management using SQLite
-- Automation of workflow processes using GitHub Actions
-- Data analysis using R
-- Reporting on Quarto. 
-
-## Business problem:
-There is an e-commerce website with numerous products, orders, and transactions on a daily basis. How to design a database schema for this website and analyse the best selling products and y-on-y profit and revenue of this company.
-
+- Database Design and Implementation
+  - Entity-Relationship (E-R) Diagram
+  - SQL Database Schema Creation
+- Data Generation and Management
+  - Synthetic Data Generation
+  - Data Import and Quality Assurance
+- Data Pipeline Generation
+  - GitHub Repository and Workflow Setup
+  - GitHub Actions for Continuous Integration
+- Data Analysis and Reporting with Quarto in R
+  - Advanced Data Analysis in R
+  - Comprehensive Reporting with Quarto
+  
 The figure below shows the E-R diagram designed for the e-commerce website.
 ![ER Diagram](https://github.com/aparna-kiran/dm_group_5/blob/main/E-R%20Diagram/E-R%20Diagram.jpeg "ER diagram")
 
